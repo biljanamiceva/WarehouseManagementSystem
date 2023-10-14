@@ -11,4 +11,15 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WMS.DataContext\WMS.DataContext.csproj" />
+    <ProjectReference Include="..\WMS.Domain\WMS.Domain.csproj" />
+    <ProjectReference Include="..\WMS.Repository\WMS.Repository.csproj" />
+    <ProjectReference Include="..\WMS.Service\WMS.Service.csproj" />
+  </ItemGroup>
+
 </Project>
