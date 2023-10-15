@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using WMS.DataContext;
+using WMS.Domain.Interfaces.Repository;
+using WMS.Domain.Interfaces.Service;
+using WMS.Repository;
+using WMS.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +14,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Repositories .AddTransient
-
+builder.Services.AddTransient<ISupplierRepository, SupplierRepository>();
 // Services .AddScoped
-
+builder.Services.AddScoped<ISupplierService, SupplierService>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
