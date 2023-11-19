@@ -15,21 +15,33 @@ namespace WMS.Repository
             _context = context;
         }
 
-        public async Task<Supplier> AddSupplier(Supplier Supplier)
+        public async Task<Supplier> AddSupplier(Supplier supplier)
         {
-            _context.Suppliers.Add(Supplier);
+            _context.Suppliers.Add(supplier);
             await _context.SaveChangesAsync();
-            return Supplier; 
+            return supplier; 
         }
 
-        public Task<Supplier> DeleteSupplier(int SupplierId)
+        public async Task DeleteSupplier(int supplierId)
         {
-            throw new NotImplementedException();
+            var supplier = await _context.Suppliers.SingleOrDefaultAsync(e => e.SupplierId == supplierId);
+            if (supplier != null)
+            {
+                _context.Suppliers.Remove(supplier);
+                await _context.SaveChangesAsync();
+            }
+          
         }
 
-        public Task<Supplier> GetSupplierById(int SupplierId)
+        public async Task<Supplier> GetSupplierById(int supplierId)
         {
-            throw new NotImplementedException();
+            var supplier = await _context.Suppliers.SingleOrDefaultAsync(e => e.SupplierId == supplierId);
+            if (supplier == null)
+            {
+                throw new ArgumentNullException("Entity is null.");
+            }
+     
+            return supplier;
         }
 
         public async Task<IEnumerable<Supplier>> GetSuppliers()
@@ -37,9 +49,11 @@ namespace WMS.Repository
             return await _context.Suppliers.ToListAsync();
         }
 
-        public Task<Supplier> UpdateSupplier(Supplier Supplier)
+        public async Task<Supplier> UpdateSupplier(Supplier supplier)
         {
-            throw new NotImplementedException();
+            _context.Entry(supplier).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return supplier; 
         }
     }
 }

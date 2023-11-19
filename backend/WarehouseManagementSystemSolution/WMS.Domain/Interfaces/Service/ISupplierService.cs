@@ -1,6 +1,7 @@
 ﻿
 
 using WMS.Domain.Models;
+using WMS.Domain.RequestModels;
 
 namespace WMS.Domain.Interfaces.Service
 {
@@ -10,15 +11,15 @@ namespace WMS.Domain.Interfaces.Service
         Task<IEnumerable<Supplier>> GetSuppliers();
 
         // Get a single supplier by their ID
-        Task<Supplier> GetSupplierById(int SupplierId);
+        Task<Supplier> GetSupplierById(int supplierId);
 
         // Add a new supplier
-        Task<Supplier> AddSupplier(Supplier Supplier);
+        Task<Supplier> AddSupplier(RequestSupplier request);
 
         // Update an existing supplier
-        Task<Supplier> UpdateSupplier(Supplier Supplier);
+        Task<Supplier> UpdateSupplier(int supplierId, RequestSupplier request);
 
         // Delete a supplier
-        Task<Supplier> DeleteSupplier(Supplier Supplier);
+        Task DeleteSupplier(int supplierId);
     }
 }

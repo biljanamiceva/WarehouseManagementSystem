@@ -1,6 +1,8 @@
-﻿using WMS.Domain.Interfaces.Repository;
+﻿using System;
+using WMS.Domain.Interfaces.Repository;
 using WMS.Domain.Interfaces.Service;
 using WMS.Domain.Models;
+using WMS.Domain.RequestModels;
 
 namespace WMS.Service
 {
@@ -13,19 +15,25 @@ namespace WMS.Service
             _supplierRepository = supplierRepository;
         }
 
-        public async Task<Supplier> AddSupplier(Supplier Supplier)
+        public async Task<Supplier> AddSupplier(RequestSupplier request)
         {
-            return await _supplierRepository.AddSupplier(Supplier);
+            var supplier = new Supplier();
+            supplier.SupplierFullName = request.SupplierFullName;
+            supplier.SupplierEmail = request.SupplierEmail;
+            supplier.SupplierPhoneNumber = request.SupplierPhoneNumber;
+            supplier.SupplierAccountNumber = request.SupplierAccountNumber;
+          
+            return await _supplierRepository.AddSupplier(supplier);
         }
 
-        public Task<Supplier> DeleteSupplier(Supplier Supplier)
+        public async Task DeleteSupplier(int SupplierId)
         {
-            throw new NotImplementedException();
+           await _supplierRepository.DeleteSupplier(SupplierId);
         }
 
-        public Task<Supplier> GetSupplierById(int SupplierId)
+        public async Task<Supplier> GetSupplierById(int supplierId)
         {
-            throw new NotImplementedException();
+            return await _supplierRepository.GetSupplierById(supplierId);
         }
 
         public async Task<IEnumerable<Supplier>> GetSuppliers()
@@ -33,9 +41,22 @@ namespace WMS.Service
             return await _supplierRepository.GetSuppliers();
         }
 
-        public Task<Supplier> UpdateSupplier(Supplier Supplier)
+        public async Task<Supplier> UpdateSupplier(int supplierId, RequestSupplier request)
         {
-            throw new NotImplementedException();
+            var supplier = await _supplierRepository.GetSupplierById(supplierId);
+
+            if (supplier == null) 
+            {
+                throw new exception("Supplier doesn't exist");
+            }
+               
+
+            supplier.SupplierFullName = request.SupplierFullName;
+            supplier.SupplierEmail = request.SupplierEmail;
+            supplier.SupplierPhoneNumber = request.SupplierPhoneNumber;
+            supplier.SupplierAccountNumber = request.SupplierAccountNumber;
+
+            return await _supplierRepository.UpdateSupplier(supplier);
         }
     }
 }

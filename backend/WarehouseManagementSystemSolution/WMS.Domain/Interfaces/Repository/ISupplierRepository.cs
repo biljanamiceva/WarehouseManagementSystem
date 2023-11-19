@@ -12,12 +12,12 @@ namespace WMS.Domain.Interfaces.Repository
 
         Task<IEnumerable<Supplier>> GetSuppliers();
 
-        Task<Supplier> GetSupplierById(int SupplierId);
+        Task<Supplier> GetSupplierById(int supplierId);
 
-        Task<Supplier> AddSupplier(Supplier Supplier);
+        Task<Supplier> AddSupplier(Supplier supplier);
 
-        Task<Supplier> UpdateSupplier(Supplier Supplier);
+        Task<Supplier> UpdateSupplier(Supplier supplier);
 
-        Task<Supplier> DeleteSupplier(int SupplierId);
+        Task DeleteSupplier(int supplierId);
     }
 }
