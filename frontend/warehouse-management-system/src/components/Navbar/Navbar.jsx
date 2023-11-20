@@ -1,14 +1,10 @@
 import React from "react";
 import "./Navbar.css";
 import { MenuOutline, SearchOutline } from "react-ionicons";
-import { useState } from "react";
+
+import { images } from "../../constants";
 
 const Navbar = ({ toggleSidebar }) => {
-  const [isActive, setIsActive] = useState(false);
-
-  const handleToggle = () => {
-    setIsActive(!isActive);
-  };
 
   return (
     <div className="topbar">
@@ -22,7 +18,8 @@ const Navbar = ({ toggleSidebar }) => {
         </label>
       </div>
       <div className="user">
-        <img src="src\assets\user.jpg" />
+        
+        <img src={images.user} alt="user" />
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { HiOutlineHome } from "react-icons/hi2";
 import { PiPackageLight, PiSignOutBold, PiArchive   } from "react-icons/pi";
 import { IoPersonOutline } from "react-icons/io5";
 import { TbReportAnalytics } from "react-icons/tb";
+import { images } from "../../constants";
 const Sidebar = ({ isActive }) => {
 
   return (
@@ -12,7 +13,7 @@ const Sidebar = ({ isActive }) => {
         <li>
           <a>
             <span className="icon">
-              <img src="src/assets/bi_box.png" className="logo" />
+              <img src={images.logo} className="logo" />
             </span>
             <span className="title">Stockify</span>
           </a>
