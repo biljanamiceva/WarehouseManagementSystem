@@ -3,9 +3,15 @@ import "./Navbar.css";
 import { MenuOutline, SearchOutline } from "react-ionicons";
 
 import { images } from "../../constants";
+import { useState } from "react";
 
-const Navbar = ({ toggleSidebar }) => {
+const Navbar = ({ toggleSidebar, handleSearchInputChange }) => {
+  const [searchInput, setSearchInput] = useState("");
 
+  const handleChange = (e) => {
+    setSearchInput(e.target.value);
+    handleSearchInputChange(e.target.value);
+  };
   return (
     <div className="topbar">
         <div className="toggle" onClick={toggleSidebar}>
@@ -13,7 +19,12 @@ const Navbar = ({ toggleSidebar }) => {
       </div>
       <div className="search">
         <label>
-          <input type="text" placeholder="search" />
+        <input
+            type="text"
+            placeholder="Search"
+            value={searchInput}
+            onChange={handleChange}
+          />
           <SearchOutline className="ion-icon" />
         </label>
       </div>

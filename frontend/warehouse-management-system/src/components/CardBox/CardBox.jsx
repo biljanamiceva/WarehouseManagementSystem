@@ -17,7 +17,7 @@ const CardBox = () => {
       .catch((error) => {
         console.error("Error fetching suppliers:", error);
       });
-  }, []);
+  }, [suppliers]);
 
   return (
     <div className="cardBox">

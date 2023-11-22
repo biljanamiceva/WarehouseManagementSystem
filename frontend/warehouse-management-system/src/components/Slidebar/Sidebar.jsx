@@ -5,6 +5,7 @@ import { PiPackageLight, PiSignOutBold, PiArchive   } from "react-icons/pi";
 import { IoPersonOutline } from "react-icons/io5";
 import { TbReportAnalytics } from "react-icons/tb";
 import { images } from "../../constants";
+import { Link } from "react-router-dom";
 const Sidebar = ({ isActive }) => {
 
   return (
@@ -19,12 +20,12 @@ const Sidebar = ({ isActive }) => {
           </a>
         </li>
         <li>
-          <a>
+        <Link to="/addSupplier" className="btn">
             <span className="icon">
               <HiOutlineHome  className="ion-icon" />
             </span>
             <span className="title">Dashboard</span>
-          </a>
+          </Link>
         </li>
 
         <li>
@@ -46,12 +47,12 @@ const Sidebar = ({ isActive }) => {
         </li>
 
         <li>
-          <a>
+        <Link to="/supplier" className="btn">
             <span className="icon">
               <IoPersonOutline className="ion-icon" />
             </span>
             <span className="title">Supplier</span>
-          </a>
+          </Link>
         </li>
 
         <li>

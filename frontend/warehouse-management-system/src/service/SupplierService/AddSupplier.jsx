@@ -14,6 +14,7 @@ const AddSupplier = ({ isActive, toggleSidebar }) => {
     supplierAccountNumber: "",
   });
   const [suppliers, setSuppliers] = useState([]);
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,33 +22,73 @@ const AddSupplier = ({ isActive, toggleSidebar }) => {
       ...supplier,
       [name]: value,
     });
+    // Clear validation error when the user starts typing
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
+  };
+
+  const validateInputs = () => {
+    const newErrors = {};
+
+    // Validate Full Name
+    if (!supplier.supplierFullName.trim()) {
+      newErrors.supplierFullName = "Full Name is required";
+    }
+
+    // Validate Phone Number
+    if (!supplier.supplierPhoneNumber.trim()) {
+      newErrors.supplierPhoneNumber = "Phone Number is required";
+    }
+
+    // Validate Email
+    if (!supplier.supplierEmail.trim()) {
+      newErrors.supplierEmail = "Email is required";
+    } else if (!/^\S+@\S+\.\S+$/.test(supplier.supplierEmail)) {
+      newErrors.supplierEmail = "Invalid email address";
+    }
+
+    // Validate Account Number
+    if (!supplier.supplierAccountNumber.trim()) {
+      newErrors.supplierAccountNumber = "Account Number is required";
+    }
+
+    setErrors(newErrors);
+
+    // Return true if there are no validation errors
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("https://localhost:7076/api/Supplier", supplier, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        setSuppliers([...suppliers, response.data]);
-        setSupplier({
-          supplierFullName: "",
-          supplierPhoneNumber: "",
-          supplierEmail: "",
-          supplierAccountNumber: "",
+
+    if (validateInputs()) {
+      axios
+        .post("https://localhost:7076/api/Supplier", supplier, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          setSuppliers([...suppliers, response.data]);
+          setSupplier({
+            supplierFullName: "",
+            supplierPhoneNumber: "",
+            supplierEmail: "",
+            supplierAccountNumber: "",
+          });
+        })
+        .catch((error) => {
+          console.error("Error adding supplier:", error);
         });
-      })
-      .catch((error) => {
-        console.error("Error adding supplier:", error);
-      });
+    }
   };
+
   const handleBack = () => {
-    // Use the navigate function to go back to the /supplier route
     navigate("/supplier");
   };
+
   return (
     <div className="container">
       <Sidebar isActive={isActive} />
@@ -66,6 +107,9 @@ const AddSupplier = ({ isActive, toggleSidebar }) => {
                 value={supplier.supplierFullName}
                 onChange={handleChange}
               />
+              {errors.supplierFullName && (
+                <div className="error">{errors.supplierFullName}</div>
+              )}
             </div>
             <div className="form-group">
               <label>Phone Number</label>
@@ -75,6 +119,9 @@ const AddSupplier = ({ isActive, toggleSidebar }) => {
                 value={supplier.supplierPhoneNumber}
                 onChange={handleChange}
               />
+              {errors.supplierPhoneNumber && (
+                <div className="error">{errors.supplierPhoneNumber}</div>
+              )}
             </div>
             <div className="form-group">
               <label>Email</label>
@@ -84,6 +131,9 @@ const AddSupplier = ({ isActive, toggleSidebar }) => {
                 value={supplier.supplierEmail}
                 onChange={handleChange}
               />
+              {errors.supplierEmail && (
+                <div className="error">{errors.supplierEmail}</div>
+              )}
             </div>
             <div className="form-group">
               <label>Account Number</label>
@@ -93,17 +143,19 @@ const AddSupplier = ({ isActive, toggleSidebar }) => {
                 value={supplier.supplierAccountNumber}
                 onChange={handleChange}
               />
+              {errors.supplierAccountNumber && (
+                <div className="error">{errors.supplierAccountNumber}</div>
+              )}
             </div>
             <div className="AddActions">
-            <button className="addSupplierBtn" type="submit">
-              Add Supplier
-            </button>
-            <button className="back-button" onClick={handleBack}>
-              Back
-            </button>
-          </div>
+              <button className="addSupplierBtn" type="submit">
+                Add Supplier
+              </button>
+              <button className="back-button" onClick={handleBack}>
+                Back
+              </button>
+            </div>
           </form>
-          
         </div>
       </div>
     </div>

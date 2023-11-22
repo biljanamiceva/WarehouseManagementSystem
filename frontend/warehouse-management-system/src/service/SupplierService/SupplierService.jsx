@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./SupplierService.css";
 import { BiSolidEdit } from "react-icons/bi";
 import { RiDeleteBinLine } from "react-icons/ri";
 
-const SupplierService = () => {
+const SupplierService = ({ searchInput, handleSearchInputChange }) => {
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedSupplierId, setSelectedSupplierId] = useState(null);
@@ -14,6 +14,10 @@ const SupplierService = () => {
   useEffect(() => {
     fetchData();
   }, []); // Only run once on component mount
+
+  useEffect(() => {
+    filterData();
+  }, [searchInput]); // Run whenever searchInput changes
 
   const fetchData = () => {
     axios
@@ -28,6 +32,25 @@ const SupplierService = () => {
       });
   };
 
+  const filterData = () => {
+    const lowerCaseSearch = searchInput.toLowerCase();
+  
+    if (searchInput.trim() === "") {
+      // If searchInput is empty, display all suppliers
+      setFilteredData(data);
+    } else {
+      // Filter suppliers based on searchInput
+      const filtered = data.filter(
+        (supplier) =>
+          supplier.supplierFullName.toLowerCase().includes(lowerCaseSearch) ||
+          supplier.supplierPhoneNumber.includes(searchInput) ||
+          supplier.supplierEmail.toLowerCase().includes(lowerCaseSearch) ||
+          supplier.supplierAccountNumber.includes(searchInput)
+      );
+      setFilteredData(filtered);
+    }
+  };
+
   const handleDelete = (supplierId) => {
     setShowDeleteModal(true);
     setSelectedSupplierId(supplierId);
@@ -40,6 +63,11 @@ const SupplierService = () => {
         // Update the local state after successful deletion
         setData((prevData) =>
           prevData.filter(
+            (supplier) => supplier.supplierId !== selectedSupplierId
+          )
+        );
+        setFilteredData((prevFilteredData) =>
+          prevFilteredData.filter(
             (supplier) => supplier.supplierId !== selectedSupplierId
           )
         );
@@ -62,10 +90,7 @@ const SupplierService = () => {
     <div className="details">
       <div className="allSuppliers">
         <div className="cardHeader">
-          <h2>All Suppliers</h2>
-          <Link to="/addSupplier" className="btn">
-            Add Supplier
-          </Link>
+          <h2>All Suppliers</h2> 
         </div>
         {loading ? (
           <p>Loading...</p>
@@ -82,7 +107,7 @@ const SupplierService = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((supplier, index) => (
+              {filteredData.map((supplier, index) => (
                 <tr key={supplier.supplierId}>
                   <td>{index + 1}</td>
                   <td>{supplier.supplierFullName}</td>
@@ -90,9 +115,7 @@ const SupplierService = () => {
                   <td>{supplier.supplierEmail}</td>
                   <td>{supplier.supplierAccountNumber}</td>
                   <td>
-                    <Link to={`/editSupplier/${supplier.supplierId}`}>
-                      <BiSolidEdit className="actionBtn" /> |
-                    </Link>
+                    <BiSolidEdit className="actionBtn" /> |
                     <RiDeleteBinLine
                       className="actionBtn"
                       onClick={() => handleDelete(supplier.supplierId)}
