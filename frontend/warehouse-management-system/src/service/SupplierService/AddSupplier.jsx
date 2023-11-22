@@ -79,6 +79,9 @@ const AddSupplier = ({ isActive, toggleSidebar }) => {
             supplierAccountNumber: "",
           });
         })
+        .then(() => {
+          navigate("/supplier");
+        })
         .catch((error) => {
           console.error("Error adding supplier:", error);
         });

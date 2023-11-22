@@ -3,6 +3,7 @@ import axios from "axios";
 import "./SupplierService.css";
 import { BiSolidEdit } from "react-icons/bi";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { Link } from "react-router-dom";
 
 const SupplierService = ({ searchInput, handleSearchInputChange }) => {
   const [data, setData] = useState([]);
@@ -13,15 +14,15 @@ const SupplierService = ({ searchInput, handleSearchInputChange }) => {
 
   useEffect(() => {
     fetchData();
-  }, []); // Only run once on component mount
+  }, []); 
 
   useEffect(() => {
     filterData();
-  }, [searchInput]); // Run whenever searchInput changes
+  }, [searchInput, data]);
 
   const fetchData = () => {
     axios
-      .get("https://localhost:7076/api/Supplier")
+      .get("https://localhost:7076/api/supplier")
       .then((response) => {
         setData(response.data);
         setLoading(false);
@@ -58,7 +59,7 @@ const SupplierService = ({ searchInput, handleSearchInputChange }) => {
 
   const confirmDelete = () => {
     axios
-      .delete(`https://localhost:7076/api/Supplier/${selectedSupplierId}`)
+      .delete(`https://localhost:7076/api/supplier/${selectedSupplierId}`)
       .then(() => {
         // Update the local state after successful deletion
         setData((prevData) =>
@@ -91,6 +92,9 @@ const SupplierService = ({ searchInput, handleSearchInputChange }) => {
       <div className="allSuppliers">
         <div className="cardHeader">
           <h2>All Suppliers</h2> 
+          <Link to="/addSupplier" className="btn">
+            Add Supplier
+          </Link>
         </div>
         {loading ? (
           <p>Loading...</p>
