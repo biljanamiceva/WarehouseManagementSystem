@@ -16,8 +16,8 @@ namespace WMS.Api.Controllers
         {
             _supplierService = supplierService;
         }
-        [HttpGet]
 
+        [HttpGet]
         public async Task<IEnumerable<Supplier>> GetSuppliers()
         {
             return await _supplierService.GetSuppliers();

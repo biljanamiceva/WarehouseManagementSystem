@@ -14,12 +14,12 @@ const Navbar = ({ toggleSidebar, handleSearchInputChange }) => {
   };
   return (
     <div className="topbar">
-        <div className="toggle" onClick={toggleSidebar}>
+      <div className="toggle" onClick={toggleSidebar}>
         <MenuOutline className="ion-icon" />
       </div>
       <div className="search">
         <label>
-        <input
+          <input
             type="text"
             placeholder="Search"
             value={searchInput}
@@ -29,7 +29,6 @@ const Navbar = ({ toggleSidebar, handleSearchInputChange }) => {
         </label>
       </div>
       <div className="user">
-        
         <img src={images.user} alt="user" />
       </div>
     </div>

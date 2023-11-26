@@ -5,7 +5,7 @@ import { BiSolidEdit } from "react-icons/bi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 
-const SupplierService = ({ searchInput, handleSearchInputChange }) => {
+const SupplierService = ({ searchInput }) => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -119,7 +119,9 @@ const SupplierService = ({ searchInput, handleSearchInputChange }) => {
                   <td>{supplier.supplierEmail}</td>
                   <td>{supplier.supplierAccountNumber}</td>
                   <td>
-                    <BiSolidEdit className="actionBtn" /> |
+                  <Link to={`/editSupplier/${supplier.supplierId}`}>
+                      <BiSolidEdit className="actionBtn" /> 
+                    </Link> |
                     <RiDeleteBinLine
                       className="actionBtn"
                       onClick={() => handleDelete(supplier.supplierId)}

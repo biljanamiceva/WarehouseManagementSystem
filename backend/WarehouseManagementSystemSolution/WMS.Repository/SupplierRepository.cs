@@ -30,7 +30,6 @@ namespace WMS.Repository
                 _context.Suppliers.Remove(supplier);
                 await _context.SaveChangesAsync();
             }
-          
         }
 
         public async Task<Supplier> GetSupplierById(int supplierId)
@@ -40,7 +39,6 @@ namespace WMS.Repository
             {
                 throw new ArgumentNullException("Entity is null.");
             }
-     
             return supplier;
         }
 

@@ -3,42 +3,46 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Slidebar/Sidebar";
 import Navbar from "../../components/Navbar/Navbar";
-import "./AddSupplier.css";
-
-const EditSupplier = ({ isActive, toggleSidebar }) => {
-  const { supplierId } = useParams();
+import "./AddCustomer.css";
+const EditCustomer = ({ isActive, toggleSidebar }) => {
+  const { customerId } = useParams();
   const navigate = useNavigate();
-  const [supplier, setSupplier] = useState({
-    supplierFullName: "",
-    supplierPhoneNumber: "",
-    supplierEmail: "",
-    supplierAccountNumber: "",
+  const [customer, setCustomer] = useState({
+    companyName: "",
+    customerPhoneNumber: "",
+    customerEmail: "",
+    customerAddress: "",
+    customerType: "", // Number instead of string
   });
   const [loading, setLoading] = useState(true);
 
+  const customerData = {
+    ...customer,
+    customerType: parseInt(customer.customerType, 12),
+  };
+
   useEffect(() => {
-    if (supplierId) {
+    if (customerId) {
       axios
-        .get(`https://localhost:7076/api/Supplier/${supplierId}`)
+        .get(`https://localhost:7076/api/Customer/${customerId}`)
         .then((response) => {
-          setSupplier(response.data);
+          setCustomer(response.data);
           setLoading(false);
         })
         .catch((error) => {
-          console.error("Error fetching supplier data:", error);
+          console.error("Error fetching customer data:", error);
           setLoading(false);
         });
     } else {
-      // Handle the case where id is undefined or not a valid value
       console.error("Invalid or undefined id parameter.");
       setLoading(false);
     }
-  }, [supplierId]);
+  }, [customerId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSupplier({
-      ...supplier,
+    setCustomer({
+      ...customer,
       [name]: value,
     });
   };
@@ -46,21 +50,21 @@ const EditSupplier = ({ isActive, toggleSidebar }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .put(`https://localhost:7076/api/Supplier/${supplierId}`, supplier, {
+      .put(`https://localhost:7076/api/Customer/${customerId}`, customerData, {
         headers: {
           "Content-Type": "application/json",
         },
       })
       .then(() => {
-        navigate("/supplier");
+        navigate("/customer");
       })
       .catch((error) => {
-        console.error("Error updating supplier:", error);
+        console.error("Error updating customer:", error);
       });
   };
 
   const handleBack = () => {
-    navigate("/supplier");
+    navigate("/customer");
   };
 
   return (
@@ -68,52 +72,69 @@ const EditSupplier = ({ isActive, toggleSidebar }) => {
       <Sidebar isActive={isActive} />
       <div className={`main ${isActive ? "active" : ""}`}>
         <Navbar toggleSidebar={toggleSidebar} />
-        <div className="add-supplier-container">
-          <div className="addHeader">
-            <h2>Edit Supplier</h2>
+        <div className="add-customer-container">
+          <div className="customer_addHeader">
+            <h2>Edit Customer</h2>
           </div>
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <form className="add-supplier-form" onSubmit={handleSubmit}>
+            <form className="add-customer-form" onSubmit={handleSubmit}>
               <div className="form-group">
-                <label>Supplier Full Name</label>
+                <label>Company Name</label>
                 <input
                   type="text"
-                  name="supplierFullName"
-                  value={supplier.supplierFullName}
+                  name="companyName"
+                  value={customer.companyName}
                   onChange={handleChange}
                 />
               </div>
+
               <div className="form-group">
                 <label>Phone Number</label>
                 <input
                   type="text"
-                  name="supplierPhoneNumber"
-                  value={supplier.supplierPhoneNumber}
+                  name="customerPhoneNumber"
+                  value={customer.customerPhoneNumber}
                   onChange={handleChange}
                 />
               </div>
+
               <div className="form-group">
                 <label>Email</label>
                 <input
                   type="text"
-                  name="supplierEmail"
-                  value={supplier.supplierEmail}
+                  name="customerEmail"
+                  value={customer.customerEmail}
                   onChange={handleChange}
                 />
               </div>
+
               <div className="form-group">
-                <label>Account Number</label>
+                <label>Customer Address</label>
                 <input
                   type="text"
-                  name="supplierAccountNumber"
-                  value={supplier.supplierAccountNumber}
+                  name="customerAddress"
+                  value={customer.customerAddress}
                   onChange={handleChange}
                 />
               </div>
+
+              <div className="form-group">
+                <label>Customer Type</label>
+                <select
+                  name="customerType"
+                  value={customer.customerType}
+                  onChange={handleChange}
+                >
+                  <option></option>
+                  <option value="1">Restaurant</option>
+                  <option value="2">Market</option>
+                  <option value="3">SmallShop</option>
+                </select>
+              </div>
               <div className="AddActions">
-                <button className="addSupplierBtn" type="submit">
+                <button className="addCustomerBtn" type="submit">
                   Update
                 </button>
                 <button className="back-button" onClick={handleBack}>
@@ -128,4 +149,4 @@ const EditSupplier = ({ isActive, toggleSidebar }) => {
   );
 };
 
-export default EditSupplier;
+export default EditCustomer;

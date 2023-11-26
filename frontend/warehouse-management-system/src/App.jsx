@@ -1,10 +1,13 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import SupplierService from "./service/SupplierService/SupplierService";
 import Supplier from "./pages/Supplier/Supplier";
 import { useState } from "react";
 import AddSupplier from "./service/SupplierService/AddSupplier";
 import EditSupplier from "./service/SupplierService/EditSupplier";
+import CustomerService from "./service/CustomerService/CustomerService";
+import Customer from "./pages/Customer/Customer";
+import AddCustomer from "./service/CustomerService/AddCustomer";
+import EditCustomer from "./service/CustomerService/EditCustomer";
 
 function App() {
   const [isActive, setIsActive] = useState(false);
@@ -31,6 +34,24 @@ function App() {
           path="/editSupplier/:supplierId"
           element={
             <EditSupplier isActive={isActive} toggleSidebar={toggleSidebar} />
+          }
+        />
+         <Route
+          path="/customer"
+          element={
+            <Customer isActive={isActive} toggleSidebar={toggleSidebar} />
+          }
+        />
+         <Route
+          path="/addCustomer"
+          element={
+            <AddCustomer isActive={isActive} toggleSidebar={toggleSidebar} />
+          }
+        />
+          <Route
+          path="/editCustomer/:customerId"
+          element={
+            <EditCustomer isActive={isActive} toggleSidebar={toggleSidebar} />
           }
         />
       </Routes>

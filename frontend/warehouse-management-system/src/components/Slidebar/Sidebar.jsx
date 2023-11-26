@@ -56,12 +56,12 @@ const Sidebar = ({ isActive }) => {
         </li>
 
         <li>
-          <a >
+        <Link to="/customer" className="btn">
             <span className="icon">
               <IoPersonOutline className="ion-icon" />
             </span>
             <span className="title">Custumer</span>
-          </a>
+          </Link>
         </li>
 
         <li>

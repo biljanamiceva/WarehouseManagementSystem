@@ -26,9 +26,9 @@ namespace WMS.Service
             return await _supplierRepository.AddSupplier(supplier);
         }
 
-        public async Task DeleteSupplier(int SupplierId)
+        public async Task DeleteSupplier(int supplierId)
         {
-           await _supplierRepository.DeleteSupplier(SupplierId);
+           await _supplierRepository.DeleteSupplier(supplierId);
         }
 
         public async Task<Supplier> GetSupplierById(int supplierId)
@@ -50,7 +50,6 @@ namespace WMS.Service
                 throw new exception("Supplier doesn't exist");
             }
                
-
             supplier.SupplierFullName = request.SupplierFullName;
             supplier.SupplierEmail = request.SupplierEmail;
             supplier.SupplierPhoneNumber = request.SupplierPhoneNumber;

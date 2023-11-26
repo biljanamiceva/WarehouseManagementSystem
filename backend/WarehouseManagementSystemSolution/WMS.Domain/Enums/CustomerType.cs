@@ -3,6 +3,8 @@ namespace WMS.Domain.Enums
 {
     public enum CustomerType
     {
-        restaurant, market
+        restaurant = 1,
+        market = 2,
+        smallShop = 3
     }
 }

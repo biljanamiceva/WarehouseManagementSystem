@@ -1,2 +1,3 @@
 import images from './images';
-export  {images}
+import CustomerType from './CustomerType';
+export  {images, CustomerType}
