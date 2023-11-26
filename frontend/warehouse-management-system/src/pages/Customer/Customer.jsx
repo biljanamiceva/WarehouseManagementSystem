@@ -12,14 +12,13 @@ const Customer = ({ isActive, toggleSidebar, title }) => {
   const [customers, setCustomers] = useState([]);
 
   useEffect(() => {
-
     const fetchData = async () => {
       try {
         const response = await axios.get("https://localhost:7076/api/Customer");
         setCustomers(response.data);
         setTotalCustomers(response.data.length);
       } catch (error) {
-        console.error("Error fetching suppliers:", error);
+        console.error("Error fetching customers:", error);
       }
     };
 

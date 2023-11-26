@@ -8,6 +8,7 @@ import CustomerService from "./service/CustomerService/CustomerService";
 import Customer from "./pages/Customer/Customer";
 import AddCustomer from "./service/CustomerService/AddCustomer";
 import EditCustomer from "./service/CustomerService/EditCustomer";
+import Inventory from "./pages/Inventory/Inventory";
 
 function App() {
   const [isActive, setIsActive] = useState(false);
@@ -36,22 +37,28 @@ function App() {
             <EditSupplier isActive={isActive} toggleSidebar={toggleSidebar} />
           }
         />
-         <Route
+        <Route
           path="/customer"
           element={
             <Customer isActive={isActive} toggleSidebar={toggleSidebar} />
           }
         />
-         <Route
+        <Route
           path="/addCustomer"
           element={
             <AddCustomer isActive={isActive} toggleSidebar={toggleSidebar} />
           }
         />
-          <Route
+        <Route
           path="/editCustomer/:customerId"
           element={
             <EditCustomer isActive={isActive} toggleSidebar={toggleSidebar} />
+          }
+        />
+        <Route
+          path="/inventory"
+          element={
+            <Inventory isActive={isActive} toggleSidebar={toggleSidebar} />
           }
         />
       </Routes>
