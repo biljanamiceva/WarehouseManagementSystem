@@ -4,10 +4,13 @@ import React, { useEffect, useState } from "react";
 import { BiSolidEdit } from "react-icons/bi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { ProductStatus } from "../../constants";
+import { Link } from "react-router-dom";
 
 const ProductService = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
   useEffect(() => {
     fetchData();
   }, []);
@@ -38,11 +41,42 @@ const ProductService = () => {
     }
   };
 
+  const handleDelete = (productId) => {
+    setShowDeleteModal(true);
+    setSelectedProductId(productId);
+  };
+
+  const confirmDelete = () => {
+    axios
+      .delete(`https://localhost:7076/api/Product/${selectedProductId}`)
+      .then(() => {
+        setData((prevData) =>
+          prevData.filter((product) => product.productId !== selectedProductId)
+        );
+
+        setShowDeleteModal(false);
+        setSelectedProductId(null);
+      })
+      .catch((error) => {
+        console.error("Error deleting data:", error);
+        setShowDeleteModal(false);
+        setSelectedProductId(null);
+      });
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setSelectedProductId(null);
+  };
+
   return (
     <div className="product_details">
       <div className="allProducts">
         <div className="product_cardHeader">
           <h2>All Products</h2>
+          <Link to="/addProduct" className="btn">
+            Add Product
+          </Link>
         </div>
         {loading ? (
           <p>Loading...</p>
@@ -65,9 +99,14 @@ const ProductService = () => {
                   <td>{product.productQuantityInStock} kg</td>
                   <td>{mapProductStatusToString(product.productStatus)}</td>
                   <td>
-                    <BiSolidEdit className="actionBtn" />
+                    <Link to={`/editProduct/${product.productId}`}>
+                      <BiSolidEdit className="actionBtn" />
+                    </Link>
                     |
-                    <RiDeleteBinLine className="product_actionBtn" />
+                    <RiDeleteBinLine
+                      className="product_actionBtn"
+                      onClick={() => handleDelete(product.productId)}
+                    />
                   </td>
                 </tr>
               ))}
@@ -75,6 +114,15 @@ const ProductService = () => {
           </table>
         )}
       </div>
+      {showDeleteModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <p>Are you sure you want to delete this product?</p>
+            <button onClick={confirmDelete}>Yes</button>
+            <button onClick={cancelDelete}>No</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

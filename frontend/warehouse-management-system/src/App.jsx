@@ -9,6 +9,8 @@ import Customer from "./pages/Customer/Customer";
 import AddCustomer from "./service/CustomerService/AddCustomer";
 import EditCustomer from "./service/CustomerService/EditCustomer";
 import Inventory from "./pages/Inventory/Inventory";
+import AddProduct from "./service/ProductService/AddProduct";
+import EditProduct from "./service/ProductService/EditProduct";
 
 function App() {
   const [isActive, setIsActive] = useState(false);
@@ -59,6 +61,19 @@ function App() {
           path="/inventory"
           element={
             <Inventory isActive={isActive} toggleSidebar={toggleSidebar} />
+          }
+        />
+          <Route
+          path="/addProduct"
+          element={
+            <AddProduct isActive={isActive} toggleSidebar={toggleSidebar} />
+          }
+        />
+
+<Route
+          path="/editProduct/:productId"
+          element={
+            <EditProduct isActive={isActive} toggleSidebar={toggleSidebar} />
           }
         />
       </Routes>
