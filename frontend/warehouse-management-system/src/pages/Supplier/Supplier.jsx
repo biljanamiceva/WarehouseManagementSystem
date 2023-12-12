@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./Supplier.css";
 import Sidebar from "../../components/Slidebar/Sidebar";
 import Navbar from "../../components/Navbar/Navbar";
 import SupplierService from "../../service/SupplierService/SupplierService";
@@ -32,7 +31,7 @@ const Supplier = ({ isActive, toggleSidebar, title }) => {
   return (
     <div className="container">
       <Sidebar isActive={isActive} />
-      <div className={`main ${isActive ? 'active' : ''}`}>
+      <div className={`main ${isActive ? "active" : ""}`}>
         <Navbar
           toggleSidebar={toggleSidebar}
           handleSearchInputChange={handleSearchInputChange}

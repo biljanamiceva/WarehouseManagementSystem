@@ -1,6 +1,5 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import "./Customer.css";
 import CustomerService from "../../service/CustomerService/CustomerService";
 import Sidebar from "../../components/Slidebar/Sidebar";
 import CardBox from "../../components/CardBox/CardBox";

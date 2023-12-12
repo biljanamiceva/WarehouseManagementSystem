@@ -3,7 +3,6 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Slidebar/Sidebar";
 import Navbar from "../../components/Navbar/Navbar";
-import "./AddProduct.css";
 
 const EditProduct = ({ isActive, toggleSidebar }) => {
   const { productId } = useParams();
@@ -70,14 +69,14 @@ const EditProduct = ({ isActive, toggleSidebar }) => {
       <Sidebar isActive={isActive} />
       <div className={`main ${isActive ? "active" : ""}`}>
         <Navbar toggleSidebar={toggleSidebar} />
-        <div className="add-product-container">
-          <div className="product_addHeader">
+        <div className="add-container">
+          <div className="addHeader">
             <h2>Edit Product</h2>
           </div>
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <form className="add-product-form" onSubmit={handleSubmit}>
+            <form className="add-form" onSubmit={handleSubmit}>
               <div className="form-group">
                 <label>Product Name</label>
                 <input
@@ -110,8 +109,8 @@ const EditProduct = ({ isActive, toggleSidebar }) => {
                   <option value="3">Out of Stock</option>
                 </select>
               </div>
-              <div className="AddActions">
-                <button className="addProductBtn" type="submit">
+              <div className="addActions">
+                <button className="addBtn" type="submit">
                   Update
                 </button>
                 <button className="back-button" onClick={handleBack}>

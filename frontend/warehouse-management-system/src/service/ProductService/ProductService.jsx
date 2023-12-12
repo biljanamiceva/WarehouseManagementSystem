@@ -1,10 +1,9 @@
-import "./ProductService.css";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BiSolidEdit } from "react-icons/bi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { ProductStatus } from "../../constants";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const ProductService = () => {
   const [data, setData] = useState([]);
@@ -70,9 +69,9 @@ const ProductService = () => {
   };
 
   return (
-    <div className="product_details">
-      <div className="allProducts">
-        <div className="product_cardHeader">
+    <div className="table_details">
+      <div className="allData">
+        <div className="cardHeader">
           <h2>All Products</h2>
           <Link to="/addProduct" className="btn">
             Add Product
@@ -100,11 +99,11 @@ const ProductService = () => {
                   <td>{mapProductStatusToString(product.productStatus)}</td>
                   <td>
                     <Link to={`/editProduct/${product.productId}`}>
-                      <BiSolidEdit className="actionBtn" />
+                      <BiSolidEdit className="app_actionBtn" />
                     </Link>
                     |
                     <RiDeleteBinLine
-                      className="product_actionBtn"
+                      className="app_actionBtn"
                       onClick={() => handleDelete(product.productId)}
                     />
                   </td>

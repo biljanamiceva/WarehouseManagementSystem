@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Slidebar/Sidebar";
 import Navbar from "../../components/Navbar/Navbar";
-import "./AddCustomer.css";
+
 const EditCustomer = ({ isActive, toggleSidebar }) => {
   const { customerId } = useParams();
   const navigate = useNavigate();
@@ -72,14 +72,14 @@ const EditCustomer = ({ isActive, toggleSidebar }) => {
       <Sidebar isActive={isActive} />
       <div className={`main ${isActive ? "active" : ""}`}>
         <Navbar toggleSidebar={toggleSidebar} />
-        <div className="add-customer-container">
-          <div className="customer_addHeader">
+        <div className="add-container">
+          <div className="addHeader">
             <h2>Edit Customer</h2>
           </div>
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <form className="add-customer-form" onSubmit={handleSubmit}>
+            <form className="add-form" onSubmit={handleSubmit}>
               <div className="form-group">
                 <label>Company Name</label>
                 <input
@@ -133,8 +133,8 @@ const EditCustomer = ({ isActive, toggleSidebar }) => {
                   <option value="3">SmallShop</option>
                 </select>
               </div>
-              <div className="AddActions">
-                <button className="addCustomerBtn" type="submit">
+              <div className="addActions">
+                <button className="addBtn" type="submit">
                   Update
                 </button>
                 <button className="back-button" onClick={handleBack}>

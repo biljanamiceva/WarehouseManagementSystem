@@ -1,10 +1,9 @@
-import "./CustomerService.css";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BiSolidEdit } from "react-icons/bi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { CustomerType } from "../../constants";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const CustomerService = () => {
   const [data, setData] = useState([]);
@@ -71,9 +70,9 @@ const CustomerService = () => {
     setSelectedCustomerId(null);
   };
   return (
-    <div className="customer_details">
-      <div className="allCustomers">
-        <div className="customer_cardHeader">
+    <div className="table_details">
+      <div className="allData">
+        <div className="cardHeader">
           <h2>All Customers</h2>
           <Link to="/addCustomer" className="btn">
             Add Customer
@@ -105,11 +104,11 @@ const CustomerService = () => {
                   <td>{mapCustomerTypeToString(customer.customerType)}</td>
                   <td>
                     <Link to={`/editCustomer/${customer.customerId}`}>
-                      <BiSolidEdit className="actionBtn" />
+                      <BiSolidEdit className="app_actionBtn" />
                     </Link>{" "}
                     |
                     <RiDeleteBinLine
-                      className="customer_actionBtn"
+                      className="app_actionBtn"
                       onClick={() => handleDelete(customer.customerId)}
                     />
                   </td>

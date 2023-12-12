@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Slidebar/Sidebar";
 import Navbar from "../../components/Navbar/Navbar";
-import "./AddSupplier.css";
+
 
 const EditSupplier = ({ isActive, toggleSidebar }) => {
   const { supplierId } = useParams();
@@ -68,14 +68,14 @@ const EditSupplier = ({ isActive, toggleSidebar }) => {
       <Sidebar isActive={isActive} />
       <div className={`main ${isActive ? "active" : ""}`}>
         <Navbar toggleSidebar={toggleSidebar} />
-        <div className="add-supplier-container">
+        <div className="add-container">
           <div className="addHeader">
             <h2>Edit Supplier</h2>
           </div>
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <form className="add-supplier-form" onSubmit={handleSubmit}>
+            <form className="add-form" onSubmit={handleSubmit}>
               <div className="form-group">
                 <label>Supplier Full Name</label>
                 <input

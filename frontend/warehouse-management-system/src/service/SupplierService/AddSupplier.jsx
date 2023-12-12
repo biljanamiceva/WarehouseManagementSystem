@@ -1,9 +1,8 @@
 import React, {  useState } from "react";
-import "./AddSupplier.css";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Slidebar/Sidebar";
 import Navbar from "../../components/Navbar/Navbar";
+import axios from "axios";
 
 const AddSupplier = ({ isActive, toggleSidebar }) => {
   const navigate = useNavigate();
@@ -13,7 +12,7 @@ const AddSupplier = ({ isActive, toggleSidebar }) => {
     supplierEmail: "",
     supplierAccountNumber: "",
   });
-  const [suppliers, setSuppliers] = useState([]);
+ 
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -71,7 +70,7 @@ const AddSupplier = ({ isActive, toggleSidebar }) => {
           },
         })
         .then((response) => {
-          setSuppliers([...suppliers, response.data]);
+       
           setSupplier({
             supplierFullName: "",
             supplierPhoneNumber: "",
@@ -97,11 +96,11 @@ const AddSupplier = ({ isActive, toggleSidebar }) => {
       <Sidebar isActive={isActive} />
       <div className={`main ${isActive ? "active" : ""}`}>
         <Navbar toggleSidebar={toggleSidebar} />
-        <div className="add-supplier-container">
+        <div className="add-container">
           <div className="addHeader">
             <h2>Add Supplier</h2>
           </div>
-          <form className="add-supplier-form" onSubmit={handleSubmit}>
+          <form className="add-form" onSubmit={handleSubmit}>
             <div className="form-group">
               <label>Full Name</label>
               <input
@@ -150,8 +149,8 @@ const AddSupplier = ({ isActive, toggleSidebar }) => {
                 <div className="error">{errors.supplierAccountNumber}</div>
               )}
             </div>
-            <div className="AddActions">
-              <button className="addSupplierBtn" type="submit">
+            <div className="addActions">
+              <button className="addBtn" type="submit">
                 Add Supplier
               </button>
               <button className="back-button" onClick={handleBack}>

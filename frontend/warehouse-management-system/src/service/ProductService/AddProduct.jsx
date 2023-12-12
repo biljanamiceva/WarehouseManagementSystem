@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./AddProduct.css";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Slidebar/Sidebar";
 import Navbar from "../../components/Navbar/Navbar";
@@ -91,11 +90,11 @@ const AddProduct = ({ isActive, toggleSidebar }) => {
     <Sidebar isActive={isActive} />
     <div className={`main ${isActive ? "active" : ""}`}>
       <Navbar toggleSidebar={toggleSidebar} />
-      <div className="add-product-container">
-        <div className="product_addHeader">
+      <div className="add-container">
+        <div className="addHeader">
           <h2>Add Product</h2>
         </div>
-        <form className="add-product-form" onSubmit={handleSubmit}>
+        <form className="add-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Product Name</label>
             <input
@@ -137,8 +136,8 @@ const AddProduct = ({ isActive, toggleSidebar }) => {
               <div className="error">{errors.productStatus}</div>
             )}
           </div>
-          <div className="AddActions">
-            <button className="addProductBtn" type="submit">
+          <div className="addActions">
+            <button className="addBtn" type="submit">
               Add Product
             </button>
             <button className="back-button" onClick={handleBack}>

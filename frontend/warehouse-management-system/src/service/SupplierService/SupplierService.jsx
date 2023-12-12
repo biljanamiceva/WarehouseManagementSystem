@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "./SupplierService.css";
 import { BiSolidEdit } from "react-icons/bi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const SupplierService = ({ searchInput }) => {
   const [data, setData] = useState([]);
@@ -14,7 +13,7 @@ const SupplierService = ({ searchInput }) => {
 
   useEffect(() => {
     fetchData();
-  }, []); 
+  }, []);
 
   useEffect(() => {
     filterData();
@@ -35,12 +34,10 @@ const SupplierService = ({ searchInput }) => {
 
   const filterData = () => {
     const lowerCaseSearch = searchInput.toLowerCase();
-  
+
     if (searchInput.trim() === "") {
-      // If searchInput is empty, display all suppliers
       setFilteredData(data);
     } else {
-      // Filter suppliers based on searchInput
       const filtered = data.filter(
         (supplier) =>
           supplier.supplierFullName.toLowerCase().includes(lowerCaseSearch) ||
@@ -61,7 +58,6 @@ const SupplierService = ({ searchInput }) => {
     axios
       .delete(`https://localhost:7076/api/supplier/${selectedSupplierId}`)
       .then(() => {
-        // Update the local state after successful deletion
         setData((prevData) =>
           prevData.filter(
             (supplier) => supplier.supplierId !== selectedSupplierId
@@ -88,10 +84,10 @@ const SupplierService = ({ searchInput }) => {
   };
 
   return (
-    <div className="details">
-      <div className="allSuppliers">
+    <div className="table_details">
+      <div className="allData">
         <div className="cardHeader">
-          <h2>All Suppliers</h2> 
+          <h2>All Suppliers</h2>
           <Link to="/addSupplier" className="btn">
             Add Supplier
           </Link>
@@ -119,11 +115,12 @@ const SupplierService = ({ searchInput }) => {
                   <td>{supplier.supplierEmail}</td>
                   <td>{supplier.supplierAccountNumber}</td>
                   <td>
-                  <Link to={`/editSupplier/${supplier.supplierId}`}>
-                      <BiSolidEdit className="actionBtn" /> 
-                    </Link> |
+                    <Link to={`/editSupplier/${supplier.supplierId}`}>
+                      <BiSolidEdit className="app_actionBtn" />
+                    </Link>{" "}
+                    |
                     <RiDeleteBinLine
-                      className="actionBtn"
+                      className="app_actionBtn"
                       onClick={() => handleDelete(supplier.supplierId)}
                     />
                   </td>

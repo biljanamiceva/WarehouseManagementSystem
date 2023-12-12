@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./AddCustomer.css";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Slidebar/Sidebar";
 import Navbar from "../../components/Navbar/Navbar";
@@ -104,11 +103,11 @@ const AddCustomer = ({ isActive, toggleSidebar }) => {
       <Sidebar isActive={isActive} />
       <div className={`main ${isActive ? "active" : ""}`}>
         <Navbar toggleSidebar={toggleSidebar} />
-        <div className="add-customer-container">
-          <div className="customer_addHeader">
+        <div className="add-container">
+          <div className="addHeader">
             <h2>Add Customer</h2>
           </div>
-          <form className="add-customer-form" onSubmit={handleSubmit}>
+          <form className="add-form" onSubmit={handleSubmit}>
             <div className="form-group">
               <label>Company Name</label>
               <input
@@ -159,12 +158,6 @@ const AddCustomer = ({ isActive, toggleSidebar }) => {
             </div>
             <div className="form-group">
               <label>Customer Type</label>
-              {/* <input
-                type="text"
-                name="customerType"
-                value={customer.customerType}
-                onChange={handleChange}
-              /> */}
               <select
                 name="customerType"
                 value={customer.customerType}
@@ -179,8 +172,8 @@ const AddCustomer = ({ isActive, toggleSidebar }) => {
                 <div className="error">{errors.customerType}</div>
               )}
             </div>
-            <div className="AddActions">
-              <button className="addCustomerBtn" type="submit">
+            <div className="addActions">
+              <button className="addBtn" type="submit">
                 Add Customer
               </button>
               <button className="back-button" onClick={handleBack}>
