@@ -10,9 +10,9 @@ import EditCustomer from "./service/CustomerService/EditCustomer";
 import Inventory from "./pages/Inventory/Inventory";
 import AddProduct from "./service/ProductService/AddProduct";
 import EditProduct from "./service/ProductService/EditProduct";
-import ReceiptService from "./service/ReceiptService/ReceiptService"
 import Receipt from "./pages/Receipt/Receipt";
 import AddReceipt from "./service/ReceiptService/AddReceipt";
+import EditReciept from "./service/ReceiptService/EditReciept";
 
 function App() {
   const [isActive, setIsActive] = useState(false);
@@ -88,6 +88,12 @@ function App() {
           path="/addReceipt"
           element={
             <AddReceipt isActive={isActive} toggleSidebar={toggleSidebar} />
+          }
+        />
+           <Route
+          path="/editReceipt/:receiptId"
+          element={
+            <EditReciept isActive={isActive} toggleSidebar={toggleSidebar} />
           }
         />
       </Routes>

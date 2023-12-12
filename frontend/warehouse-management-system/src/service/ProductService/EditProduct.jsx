@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Slidebar/Sidebar";
 import Navbar from "../../components/Navbar/Navbar";
+import axios from "axios";
 
 const EditProduct = ({ isActive, toggleSidebar }) => {
   const { productId } = useParams();
@@ -10,7 +10,7 @@ const EditProduct = ({ isActive, toggleSidebar }) => {
   const [product, setProduct] = useState({
     productName: "",
     productQuantityInStock: "",
-    productStatus: "", // Number instead of string
+    productStatus: "", 
   });
   const [loading, setLoading] = useState(true);
 
