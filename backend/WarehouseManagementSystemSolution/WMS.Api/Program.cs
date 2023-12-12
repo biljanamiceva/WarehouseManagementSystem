@@ -17,10 +17,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 builder.Services.AddTransient<ISupplierRepository, SupplierRepository>();
 builder.Services.AddTransient<ICustomerRepository, CustomerRepository>();
 builder.Services.AddTransient<IProductRepository, ProductRepository>();
+builder.Services.AddTransient<IReceiptRepository, ReceiptRepository>();
 // Services .AddScoped
 builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IReceiptService, ReceiptService>();
 
 var app = builder.Build();
 
@@ -38,7 +40,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization(); 
+app.UseAuthorization();
 
 app.MapControllers();
 
