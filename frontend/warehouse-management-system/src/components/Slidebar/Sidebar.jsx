@@ -64,12 +64,12 @@ const Sidebar = ({ isActive }) => {
         </li>
 
         <li>
-          <a>
+        <Link to="/receipt" className="btn">
             <span className="icon">
               <TbReportAnalytics className="ion-icon" />
             </span>
-            <span className="title">Reports</span>
-          </a>
+            <span className="title">Reciept</span>
+            </Link>
         </li>
         <li>
           <a>

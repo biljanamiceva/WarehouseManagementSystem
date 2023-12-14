@@ -13,6 +13,10 @@ import EditProduct from "./service/ProductService/EditProduct";
 import Receipt from "./pages/Receipt/Receipt";
 import AddReceipt from "./service/ReceiptService/AddReceipt";
 import EditReciept from "./service/ReceiptService/EditReciept";
+import InvoiceService from "./service/InvoiceService/InvoiceService";
+import AddInvoice from "./service/InvoiceService/AddInvoice";
+import Invoice from "./pages/Invoice/Invoice";
+import EditInvoice from "./service/InvoiceService/EditInvoice";
 
 function App() {
   const [isActive, setIsActive] = useState(false);
@@ -78,27 +82,44 @@ function App() {
             <EditProduct isActive={isActive} toggleSidebar={toggleSidebar} />
           }
         />
-          <Route
+        <Route
           path="/receipt"
           element={
             <Receipt isActive={isActive} toggleSidebar={toggleSidebar} />
           }
         />
-         <Route
+        <Route
           path="/addReceipt"
           element={
             <AddReceipt isActive={isActive} toggleSidebar={toggleSidebar} />
           }
         />
-           <Route
+        <Route
           path="/editReceipt/:receiptId"
           element={
             <EditReciept isActive={isActive} toggleSidebar={toggleSidebar} />
           }
         />
-      </Routes>
 
-    
+        <Route
+          path="/invoice"
+          element={
+            <Invoice isActive={isActive} toggleSidebar={toggleSidebar} />
+          }
+        />
+        <Route
+          path="/addInvoice"
+          element={
+            <AddInvoice isActive={isActive} toggleSidebar={toggleSidebar} />
+          }
+        />
+         <Route
+          path="/editInvoice/:invoiceId"
+          element={
+            <EditInvoice isActive={isActive} toggleSidebar={toggleSidebar} />
+          }
+        />
+      </Routes>
     </div>
   );
 }

@@ -4,7 +4,7 @@ namespace WMS.Domain.Enums
 {
     public enum InvoiceStatus
     {
-        Paid,
-        NotPaid
+        Paid = 1,
+        NotPaid = 2
     }
 }
