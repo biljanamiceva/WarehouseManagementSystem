@@ -1,6 +1,4 @@
-﻿
-
-using WMS.Domain.Interfaces.Repository;
+﻿using WMS.Domain.Interfaces.Repository;
 using WMS.Domain.Interfaces.Service;
 using WMS.Domain.Models;
 using WMS.Domain.RequestModels;
@@ -57,7 +55,7 @@ namespace WMS.Service
             invoice.PaymentDueDate = request.PaymentDueDate;
             invoice.TotalAmount = request.TotalAmount;
             invoice.InvoiceStatus = request.InvoiceStatus;
-           // invoice.CustomerId = request.CustomerId;
+            // invoice.CustomerId = request.CustomerId;
 
             return await _invoiceRepository.UpdateInvoice(invoice);
         }

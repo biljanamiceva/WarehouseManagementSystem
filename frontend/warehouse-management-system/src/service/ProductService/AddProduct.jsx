@@ -9,6 +9,7 @@ const AddProduct = ({ isActive, toggleSidebar }) => {
   const [product, setProduct] = useState({
     productName: "",
     productQuantityInStock: "",
+    productPrice: "",
     productStatus: "", // Number instead of string
   });
   const [errors, setErrors] = useState({});
@@ -36,6 +37,11 @@ const AddProduct = ({ isActive, toggleSidebar }) => {
     // Validate Product Name
     if (!product.productName.trim()) {
       newErrors.productName = "Product Name is required";
+    }
+
+    // Validate Price
+    if (!product.productPrice.trim()) {
+      newErrors.productPrice = "Price is required";
     }
 
     // Validate Qunatity
@@ -85,70 +91,83 @@ const AddProduct = ({ isActive, toggleSidebar }) => {
     navigate("/inventory");
   };
 
-  return(
+  return (
     <div className="container">
-    <Sidebar isActive={isActive} />
-    <div className={`main ${isActive ? "active" : ""}`}>
-      <Navbar toggleSidebar={toggleSidebar} />
-      <div className="add-container">
-        <div className="addHeader">
-          <h2>Add Product</h2>
+      <Sidebar isActive={isActive} />
+      <div className={`main ${isActive ? "active" : ""}`}>
+        <Navbar toggleSidebar={toggleSidebar} />
+        <div className="add-container">
+          <div className="addHeader">
+            <h2>Add Product</h2>
+          </div>
+          <form className="add-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>Product Name</label>
+              <input
+                type="text"
+                name="productName"
+                value={product.productName}
+                onChange={handleChange}
+              />
+              {errors.productName && (
+                <div className="error">{errors.productName}</div>
+              )}
+            </div>
+            <div className="form-group">
+              <label>Quantity</label>
+              <input
+                type="text"
+                name="productQuantityInStock"
+                value={product.productQuantityInStock}
+                onChange={handleChange}
+              />
+              {errors.productQuantityInStock && (
+                <div className="error">{errors.productQuantityInStock}</div>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label>Price</label>
+              <input
+                type="text"
+                name="productPrice"
+                value={product.productPrice}
+                onChange={handleChange}
+              />
+              {errors.productPrice && (
+                <div className="error">{errors.productPrice}</div>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label>Status</label>
+              <select
+                name="productStatus"
+                value={product.productStatus}
+                onChange={handleChange}
+              >
+                <option></option>
+                <option value="1">In Stock</option>
+                <option value="2">Low Stock</option>
+                <option value="3">Out of Stock</option>
+              </select>
+              {errors.productStatus && (
+                <div className="error">{errors.productStatus}</div>
+              )}
+            </div>
+            <div className="addActions">
+              <button className="addBtn" type="submit">
+                Add Product
+              </button>
+              <button className="back-button" onClick={handleBack}>
+                Back
+              </button>
+            </div>
+          </form>
         </div>
-        <form className="add-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Product Name</label>
-            <input
-              type="text"
-              name="productName"
-              value={product.productName}
-              onChange={handleChange}
-            />
-            {errors.productName && (
-              <div className="error">{errors.productName}</div>
-            )}
-          </div>
-          <div className="form-group">
-            <label>Quantity</label>
-            <input
-              type="text"
-              name="productQuantityInStock"
-              value={product.productQuantityInStock}
-              onChange={handleChange}
-            />
-            {errors.productQuantityInStock && (
-              <div className="error">{errors.productQuantityInStock}</div>
-            )}
-          </div>
-          
-          <div className="form-group">
-            <label>Status</label>
-            <select
-              name="productStatus"
-              value={product.productStatus}
-              onChange={handleChange}
-            >
-              <option></option>
-              <option value="1">In Stock</option>
-              <option value="2">Low Stock</option>
-              <option value="3">Out of Stock</option>
-            </select>
-            {errors.productStatus && (
-              <div className="error">{errors.productStatus}</div>
-            )}
-          </div>
-          <div className="addActions">
-            <button className="addBtn" type="submit">
-              Add Product
-            </button>
-            <button className="back-button" onClick={handleBack}>
-              Back
-            </button>
-          </div>
-        </form>
       </div>
     </div>
-  </div>
-  )
+  );
 };
 
 export default AddProduct;

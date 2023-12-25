@@ -17,6 +17,8 @@ import InvoiceService from "./service/InvoiceService/InvoiceService";
 import AddInvoice from "./service/InvoiceService/AddInvoice";
 import Invoice from "./pages/Invoice/Invoice";
 import EditInvoice from "./service/InvoiceService/EditInvoice";
+import Order from "./pages/Order/Order";
+import AddOrder from "./service/OrderService/AddOrder";
 
 function App() {
   const [isActive, setIsActive] = useState(false);
@@ -113,10 +115,23 @@ function App() {
             <AddInvoice isActive={isActive} toggleSidebar={toggleSidebar} />
           }
         />
-         <Route
+        <Route
           path="/editInvoice/:invoiceId"
           element={
             <EditInvoice isActive={isActive} toggleSidebar={toggleSidebar} />
+          }
+        />
+
+        <Route
+          path="/order"
+          element={
+            <Order isActive={isActive} toggleSidebar={toggleSidebar} />
+          }
+        />
+         <Route
+          path="/addOrder"
+          element={
+            <AddOrder isActive={isActive} toggleSidebar={toggleSidebar} />
           }
         />
       </Routes>

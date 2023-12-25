@@ -12,7 +12,7 @@ using WMS.DataContext;
 namespace WMS.DataContext.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231015145525_InitialMigration")]
+    [Migration("20231225165110_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -67,6 +67,9 @@ namespace WMS.DataContext.Migrations
                     b.Property<int>("InvoiceStatus")
                         .HasColumnType("int");
 
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("PaymentDueDate")
                         .HasColumnType("datetime2");
 
@@ -77,7 +80,57 @@ namespace WMS.DataContext.Migrations
 
                     b.HasIndex("CustomerId");
 
+                    b.HasIndex("OrderId")
+                        .IsUnique()
+                        .HasFilter("[OrderId] IS NOT NULL");
+
                     b.ToTable("Invoices");
+                });
+
+            modelBuilder.Entity("WMS.Domain.Models.Order", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalAmount")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("WMS.Domain.Models.OrderProducts", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderProductId"));
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderProducts");
                 });
 
             modelBuilder.Entity("WMS.Domain.Models.Product", b =>
@@ -91,7 +144,10 @@ namespace WMS.DataContext.Migrations
                     b.Property<string>("ProductName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProductQuantityInStock")
+                    b.Property<int>("ProductPrice")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductQuantityInStock")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductStatus")
@@ -100,36 +156,6 @@ namespace WMS.DataContext.Migrations
                     b.HasKey("ProductId");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("WMS.Domain.Models.ProductInvoice", b =>
-                {
-                    b.Property<int>("ProductInvoiceId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductInvoiceId"));
-
-                    b.Property<int>("InvoiceId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("ProductAmount")
-                        .HasPrecision(36, 2)
-                        .HasColumnType("decimal(36,2)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductQuantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductInvoiceId");
-
-                    b.HasIndex("InvoiceId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductInvoices");
                 });
 
             modelBuilder.Entity("WMS.Domain.Models.Receipt", b =>
@@ -201,24 +227,30 @@ namespace WMS.DataContext.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("WMS.Domain.Models.Order", "Order")
+                        .WithOne("Invoice")
+                        .HasForeignKey("WMS.Domain.Models.Invoice", "OrderId");
+
                     b.Navigation("Customer");
+
+                    b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("WMS.Domain.Models.ProductInvoice", b =>
+            modelBuilder.Entity("WMS.Domain.Models.OrderProducts", b =>
                 {
-                    b.HasOne("WMS.Domain.Models.Invoice", "Invoice")
-                        .WithMany("ProductInvoices")
-                        .HasForeignKey("InvoiceId")
+                    b.HasOne("WMS.Domain.Models.Order", "Order")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WMS.Domain.Models.Product", "Product")
-                        .WithMany("ProductInvoices")
+                        .WithMany("OrderProducts")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Invoice");
+                    b.Navigation("Order");
 
                     b.Navigation("Product");
                 });
@@ -247,14 +279,16 @@ namespace WMS.DataContext.Migrations
                     b.Navigation("Invoices");
                 });
 
-            modelBuilder.Entity("WMS.Domain.Models.Invoice", b =>
+            modelBuilder.Entity("WMS.Domain.Models.Order", b =>
                 {
-                    b.Navigation("ProductInvoices");
+                    b.Navigation("Invoice");
+
+                    b.Navigation("OrderProducts");
                 });
 
             modelBuilder.Entity("WMS.Domain.Models.Product", b =>
                 {
-                    b.Navigation("ProductInvoices");
+                    b.Navigation("OrderProducts");
 
                     b.Navigation("Receipts");
                 });

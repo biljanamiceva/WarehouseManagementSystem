@@ -46,6 +46,17 @@ namespace WMS.Repository
             return await _context.Products.ToListAsync();
         }
 
+        public async Task<List<Product>> GetProductsByIds(List<int> productIds)
+        {
+            var products = await _context.Products
+        .Where(product => productIds.Contains(product.ProductId))
+        .ToListAsync();
+
+            return products;
+
+
+        }
+
         public async Task<Product> UpdateProduct(Product product)
         {
             _context.Entry(product).State = EntityState.Modified;

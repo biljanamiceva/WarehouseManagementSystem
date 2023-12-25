@@ -10,6 +10,7 @@ const EditProduct = ({ isActive, toggleSidebar }) => {
   const [product, setProduct] = useState({
     productName: "",
     productQuantityInStock: "",
+    productPrice: "",
     productStatus: "", 
   });
   const [loading, setLoading] = useState(true);
@@ -93,6 +94,16 @@ const EditProduct = ({ isActive, toggleSidebar }) => {
                   type="text"
                   name="productQuantityInStock"
                   value={product.productQuantityInStock}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Price</label>
+                <input
+                  type="text"
+                  name="productPrice"
+                  value={product.productPrice}
                   onChange={handleChange}
                 />
               </div>

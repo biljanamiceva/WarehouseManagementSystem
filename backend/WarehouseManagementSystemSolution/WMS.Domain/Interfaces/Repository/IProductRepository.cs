@@ -13,5 +13,6 @@ namespace WMS.Domain.Interfaces.Repository
         Task<Product> UpdateProduct(Product product);
 
         Task DeleteProduct(int productId);
+        Task<List<Product>> GetProductsByIds(List<int> productIds);
     }
 }

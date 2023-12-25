@@ -37,12 +37,12 @@ const Sidebar = ({ isActive }) => {
         </li>
 
         <li>
-          <a>
+        <Link to="/order" className="btn">
             <span className="icon">
               <PiPackageLight className="ion-icon" />
             </span>
             <span className="title">Order</span>
-          </a>
+            </Link>
         </li>
 
         <li>

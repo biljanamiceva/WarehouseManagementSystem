@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using WMS.Domain.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace WMS.DataContext
 {
@@ -15,19 +17,42 @@ namespace WMS.DataContext
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
 
-        public DbSet<ProductInvoice> ProductInvoices { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderProducts> OrderProducts { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<OrderProducts>().HasKey(e => e.OrderProductId);
+            modelBuilder.Entity<OrderProducts>().Property(e => e.OrderProductId).ValueGeneratedOnAdd();
+
             modelBuilder.Entity<Receipt>()
                 .Property(r => r.Amount)
                 .HasPrecision(36, 2);
 
-            modelBuilder.Entity<ProductInvoice>()
-              .Property(r => r.ProductAmount)
-              .HasPrecision(36, 2);
+            // M:N relationship between Order and Product
+            modelBuilder.Entity<OrderProducts>()
+                .HasKey(op => new { op.OrderId, op.ProductId });
+
+            modelBuilder.Entity<OrderProducts>()
+                .HasOne(op => op.Order)
+                .WithMany(o => o.OrderProducts)
+                .HasForeignKey(op => op.OrderId);
+
+            modelBuilder.Entity<OrderProducts>()
+                .HasOne(op => op.Product)
+                .WithMany(p => p.OrderProducts)
+                .HasForeignKey(op => op.ProductId);
+
+            //  1:1 relationship between Order and Invoice
+            modelBuilder.Entity<Invoice>()
+                .HasOne(i => i.Order)
+                .WithOne(o => o.Invoice)
+                .HasForeignKey<Invoice>(i => i.OrderId);
+
 
             // 1:N relationship between Supplier and Receipt
             modelBuilder.Entity<Receipt>()
@@ -46,21 +71,6 @@ namespace WMS.DataContext
            .HasOne<Customer>(i => i.Customer)
            .WithMany(c => c.Invoices)
            .HasForeignKey(i => i.CustomerId);
-
-
-            //  M:N relationship 
-            modelBuilder.Entity<ProductInvoice>()
-           .HasKey(p => p.ProductInvoiceId);
-
-            modelBuilder.Entity<ProductInvoice>()
-                .HasOne<Product>(pi => pi.Product)
-                .WithMany(p => p.ProductInvoices)
-                .HasForeignKey(pi => pi.ProductId);
-
-            modelBuilder.Entity<ProductInvoice>()
-                .HasOne<Invoice>(pi => pi.Invoice)
-                .WithMany(i => i.ProductInvoices)
-                .HasForeignKey(pi => pi.InvoiceId);
         }
     }
 }

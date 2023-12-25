@@ -20,6 +20,7 @@ namespace WMS.Service
 
             product.ProductName = request.ProductName;
             product.ProductQuantityInStock = request.ProductQuantityInStock;
+            product.ProductPrice = request.ProductPrice;
             product.ProductStatus = request.ProductStatus;
 
             return await _productRepository.AddProduct(product);
@@ -51,6 +52,7 @@ namespace WMS.Service
 
             product.ProductName = request.ProductName;
             product.ProductQuantityInStock = request.ProductQuantityInStock;
+            product.ProductPrice = request.ProductPrice;
             product.ProductStatus = request.ProductStatus;
 
             return await _productRepository.UpdateProduct(product);

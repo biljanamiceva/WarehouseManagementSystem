@@ -11,8 +11,9 @@ namespace WMS.Domain.Models
         public InvoiceStatus InvoiceStatus { get; set; }
         public int CustomerId { get; set; } // Foreign key
 
-        public Customer? Customer { get; set; }  // Reference to the Product
+        public Customer? Customer { get; set; }  // Reference to the Customer
 
-        public IEnumerable<ProductInvoice>? ProductInvoices { get; set; } // M:N relationship with Products
+        public int? OrderId { get; set; } // Foreign key
+        public Order? Order { get; set; }      // Reference to the Order
     }
 }

@@ -86,6 +86,7 @@ const ProductService = () => {
                 <td>#</td>
                 <td>Product</td>
                 <td>Quantity</td>
+                <td>Price</td>
                 <td>Status</td>
                 <td>Actions</td>
               </tr>
@@ -96,6 +97,7 @@ const ProductService = () => {
                   <td>{index + 1}</td>
                   <td>{product.productName}</td>
                   <td>{product.productQuantityInStock} kg</td>
+                  <td>{product.productPrice}</td>
                   <td>{mapProductStatusToString(product.productStatus)}</td>
                   <td>
                     <Link to={`/editProduct/${product.productId}`}>
