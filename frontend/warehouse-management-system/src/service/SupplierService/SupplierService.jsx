@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { BiSolidEdit } from "react-icons/bi";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SupplierService = ({ searchInput }) => {
   const [data, setData] = useState([]);
@@ -10,6 +11,7 @@ const SupplierService = ({ searchInput }) => {
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedSupplierId, setSelectedSupplierId] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -83,6 +85,14 @@ const SupplierService = ({ searchInput }) => {
     setSelectedSupplierId(null);
   };
 
+  // const navigateToReceipts = (supplierId) => {
+  //   window.location.href = `/supplierInfo/${supplierId}/receipts`;
+  // };
+
+  const navigateToReceipts = (supplierId) => {
+    navigate(`/supplierInfo/${supplierId}/receipts`);
+  };
+
   return (
     <div className="table_details">
       <div className="allData">
@@ -108,7 +118,8 @@ const SupplierService = ({ searchInput }) => {
             </thead>
             <tbody>
               {filteredData.map((supplier, index) => (
-                <tr key={supplier.supplierId}>
+                 <tr key={supplier.supplierId} onClick={() => navigateToReceipts(supplier.supplierId)} style={{cursor: "pointer"}}>
+                
                   <td>{index + 1}</td>
                   <td>{supplier.supplierFullName}</td>
                   <td>{supplier.supplierPhoneNumber}</td>

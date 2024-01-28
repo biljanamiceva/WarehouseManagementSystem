@@ -112,8 +112,8 @@ const EditSupplier = ({ isActive, toggleSidebar }) => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="AddActions">
-                <button className="addSupplierBtn" type="submit">
+              <div className="addActions">
+                <button className="addBtn" type="submit">
                   Update
                 </button>
                 <button className="back-button" onClick={handleBack}>
