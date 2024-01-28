@@ -19,8 +19,6 @@ import Invoice from "./pages/Invoice/Invoice";
 import EditInvoice from "./service/InvoiceService/EditInvoice";
 import Order from "./pages/Order/Order";
 import AddOrder from "./service/OrderService/AddOrder";
-import HomePage from "./pages/HomePage/HomePage";
-import SupplierInfo from "./service/SupplierService/SupplierInfo";
 
 function App() {
   const [isActive, setIsActive] = useState(false);
@@ -31,7 +29,6 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<HomePage />} />
         <Route
           path="/supplier"
           element={
@@ -127,18 +124,14 @@ function App() {
 
         <Route
           path="/order"
-          element={<Order isActive={isActive} toggleSidebar={toggleSidebar} />}
+          element={
+            <Order isActive={isActive} toggleSidebar={toggleSidebar} />
+          }
         />
-        <Route
+         <Route
           path="/addOrder"
           element={
             <AddOrder isActive={isActive} toggleSidebar={toggleSidebar} />
-          }
-        />
-        <Route
-          path="/supplierInfo/:supplierId/:receipt"
-          element={
-            <SupplierInfo isActive={isActive} toggleSidebar={toggleSidebar} />
           }
         />
       </Routes>

@@ -84,9 +84,8 @@ const OrderService = () => {
             <thead>
               <tr>
                 <td>#</td>
-                <td>Custumer Name</td>
-                <td>Total Amount</td>
                 <td>Order Status</td>
+                <td>Total Amount</td>
                 <td>Actions</td>
               </tr>
             </thead>
@@ -94,10 +93,8 @@ const OrderService = () => {
               {orders.map((order, index) => (
                 <tr key={order.orderId}>
                   <td>{index + 1}</td>
-                  <td>{order.companyName}</td>
-                  <td>{order.totalAmount}</td>
                   <td>{mapOrderStatusToString(order.orderStatus)}</td>
-                 
+                  <td>{order.totalAmount}</td>
                   <td>
                     <Link to={`/editOrder/${order.orderId}`}>
                       <BiSolidEdit className="app_actionBtn" />

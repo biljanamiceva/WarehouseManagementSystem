@@ -13,7 +13,7 @@ const Sidebar = ({ isActive }) => {
         <li>
           <a>
             <span className="icon">
-              <img src={images.logo}  className="logo" />
+              <img src={images.logo} className="logo" />
             </span>
             <span className="title">Stockify</span>
           </a>
@@ -69,15 +69,6 @@ const Sidebar = ({ isActive }) => {
               <TbReportAnalytics className="ion-icon" />
             </span>
             <span className="title">Reciept</span>
-            </Link>
-        </li>
-
-        <li>
-        <Link to="/invoice" className="btn">
-            <span className="icon">
-              <TbReportAnalytics className="ion-icon" />
-            </span>
-            <span className="title">Invoices</span>
             </Link>
         </li>
         <li>

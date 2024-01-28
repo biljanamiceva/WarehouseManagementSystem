@@ -77,16 +77,6 @@ a {
   border-radius: 6px;
 }
 
-.cardHeader .btnBack{
-  position: relative;
-  padding: 5px 10px;
-  background: var(--black2);
-  text-decoration: none;
-  color: var(--white);
-  border-radius: 6px;
-  cursor: pointer;
-}
-
 .table_details table {
   width: 100%;
   border-collapse: collapse;
@@ -264,25 +254,6 @@ select option {
   margin-top: 4px;
 }
 
-/* ============================ Supplier Info =========================== */
-
-.status.paid {
-  padding: 2px 4px;
-  background: #8de02c;
-  color: var(--white);
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-}
-.status.not-paid {
-  padding: 2px 4px;
-  background: #f00;
-  color: var(--white);
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
 /* ============================ Media =========================== */
 @media (max-width: 768px) {
   .table_details {
@@ -317,8 +288,3 @@ select option {
     font-size: 20px;
   }
 }
-
-
-
-
-
