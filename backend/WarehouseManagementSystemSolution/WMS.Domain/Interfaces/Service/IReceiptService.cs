@@ -18,6 +18,6 @@ namespace WMS.Domain.Interfaces.Service
         Task<Receipt> UpdateReceipt(int receiptId, RequestReceipt request);
 
         // Delete a receipt
-        Task DeleteReceipt(int receiptId); 
+        Task DeleteReceipt(int receiptId);
     }
 }

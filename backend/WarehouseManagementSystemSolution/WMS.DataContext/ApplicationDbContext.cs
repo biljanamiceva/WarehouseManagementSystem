@@ -71,6 +71,12 @@ namespace WMS.DataContext
            .HasOne<Customer>(i => i.Customer)
            .WithMany(c => c.Invoices)
            .HasForeignKey(i => i.CustomerId);
+
+            //1:N relationship between Custumer and Order
+            modelBuilder.Entity<Order>()
+           .HasOne<Customer>(i => i.Customer)
+           .WithMany(c => c.Orders)
+           .HasForeignKey(i => i.CustomerId);
         }
     }
 }

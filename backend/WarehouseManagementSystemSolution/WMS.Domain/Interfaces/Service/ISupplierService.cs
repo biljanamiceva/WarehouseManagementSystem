@@ -2,6 +2,7 @@
 
 using WMS.Domain.Models;
 using WMS.Domain.RequestModels;
+using WMS.Domain.ResponseModels;
 
 namespace WMS.Domain.Interfaces.Service
 {
@@ -21,5 +22,7 @@ namespace WMS.Domain.Interfaces.Service
 
         // Delete a supplier
         Task DeleteSupplier(int supplierId);
+
+        Task<ResponseSingleSupplier> GetSupplierReceipts(int supplierId);
     }
 }

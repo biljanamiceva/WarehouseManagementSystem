@@ -19,7 +19,7 @@ namespace WMS.Api.Controllers
             _orderService = orderService;
         }
         [HttpGet]
-        public async Task<IEnumerable<Order>> GetInvoices()
+        public async Task<IEnumerable<ResponseOrder>> GetInvoices()
         {
             return await _orderService.GetOrders();
         }

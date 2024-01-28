@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using WMS.Domain.Interfaces.Service;
 using WMS.Domain.Models;
 using WMS.Domain.RequestModels;
+using WMS.Domain.ResponseModels;
+using WMS.Service;
 
 namespace WMS.Api.Controllers
 {
@@ -23,11 +25,10 @@ namespace WMS.Api.Controllers
             return await _supplierService.GetSuppliers();
         }
 
-
         [HttpPost]
         public async Task<Supplier> AddSupplier(RequestSupplier request)
         {
-           return await _supplierService.AddSupplier(request);
+            return await _supplierService.AddSupplier(request);
         }
 
         [HttpPut("{supplierId}")]
@@ -46,6 +47,12 @@ namespace WMS.Api.Controllers
         public async Task<Supplier> GetSupplierById(int supplierId)
         {
             return await _supplierService.GetSupplierById(supplierId);
+        }
+
+        [HttpGet("{supplierId}/receipts")]
+        public async Task<ResponseSingleSupplier> GetSupplierReceipts (int supplierId)
+        {
+            return await _supplierService.GetSupplierReceipts(supplierId);
         }
 
     }

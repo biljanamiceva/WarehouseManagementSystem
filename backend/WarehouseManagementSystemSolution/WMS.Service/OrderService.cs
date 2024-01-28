@@ -4,6 +4,7 @@ using WMS.Domain.Interfaces.Repository;
 using WMS.Domain.Interfaces.Service;
 using WMS.Domain.Models;
 using WMS.Domain.RequestModels;
+using WMS.Domain.ResponseModels;
 
 namespace WMS.Service
 {
@@ -28,6 +29,7 @@ namespace WMS.Service
             var order = new Order();
 
             order.OrderStatus = request.OrderStatus;
+            order.CustomerId = request.CustomerId;
             var productIds = request.ProductIds?.ToList();
             var products = await _productRepository.GetProductsByIds(productIds!);
 
@@ -67,7 +69,7 @@ namespace WMS.Service
             return await _orderRepository.GetOrderById(orderId);
         }
 
-        public async Task<IEnumerable<Order>> GetOrders()
+        public async Task<IEnumerable<ResponseOrder>> GetOrders()
         {
             return await _orderRepository.GetOrders();
         }

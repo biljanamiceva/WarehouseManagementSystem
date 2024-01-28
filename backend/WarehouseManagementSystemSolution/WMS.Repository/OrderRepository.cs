@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using WMS.DataContext;
 using WMS.Domain.Interfaces.Repository;
 using WMS.Domain.Models;
+using WMS.Domain.ResponseModels;
 
 namespace WMS.Repository
 {
@@ -10,7 +11,7 @@ namespace WMS.Repository
     {
         private readonly ApplicationDbContext _context;
 
-        public OrderRepository(ApplicationDbContext context )
+        public OrderRepository(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -41,9 +42,21 @@ namespace WMS.Repository
             return order;
         }
 
-        public async Task<IEnumerable<Order>> GetOrders()
+        public async Task<IEnumerable<ResponseOrder>> GetOrders()
         {
-            return await _context.Orders.ToListAsync();
+            var resultList = await _context.Orders
+            .Include(r => r.Customer)
+            .Select(order => new ResponseOrder
+            {
+                OrderId = order.OrderId,
+                TotalAmount = order.TotalAmount,
+                OrderStatus = order.OrderStatus,
+                CustomerId = order.CustomerId,
+                CompanyName = order.Customer != null ? order.Customer.CompanyName : null,
+            })
+            .ToListAsync();
+
+            return resultList;
         }
 
         public async Task<Order> UpdateOrder(Order order)
@@ -52,5 +65,7 @@ namespace WMS.Repository
             await _context.SaveChangesAsync();
             return order;
         }
+
+
     }
 }

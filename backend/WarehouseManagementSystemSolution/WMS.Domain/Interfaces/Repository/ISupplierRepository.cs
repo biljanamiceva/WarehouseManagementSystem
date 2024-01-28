@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WMS.Domain.Models;
+using WMS.Domain.ResponseModels;
 
 namespace WMS.Domain.Interfaces.Repository
 {
@@ -19,5 +20,7 @@ namespace WMS.Domain.Interfaces.Repository
         Task<Supplier> UpdateSupplier(Supplier supplier);
 
         Task DeleteSupplier(int supplierId);
+
+        Task <ResponseSingleSupplier> GetSupplierReceipts(int supplierId);
     }
 }

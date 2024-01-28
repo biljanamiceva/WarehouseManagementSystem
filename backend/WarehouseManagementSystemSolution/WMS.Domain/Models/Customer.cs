@@ -15,5 +15,8 @@ namespace WMS.Domain.Models
 
         //  1:N relationship with Invoices
         public IEnumerable<Invoice>? Invoices { get; set; }
+
+        //  1:N relationship with Orders
+        public IEnumerable<Order>? Orders { get; set; }
     }
 }

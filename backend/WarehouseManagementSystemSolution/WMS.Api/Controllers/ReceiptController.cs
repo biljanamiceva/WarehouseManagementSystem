@@ -48,5 +48,7 @@ namespace WMS.Api.Controllers
         {
             return await _receiptService.GetReceiptById(receiptId);
         }
+
+      
     }
 }

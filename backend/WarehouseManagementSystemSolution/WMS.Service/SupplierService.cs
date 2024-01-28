@@ -3,6 +3,7 @@ using WMS.Domain.Interfaces.Repository;
 using WMS.Domain.Interfaces.Service;
 using WMS.Domain.Models;
 using WMS.Domain.RequestModels;
+using WMS.Domain.ResponseModels;
 
 namespace WMS.Service
 {
@@ -34,6 +35,11 @@ namespace WMS.Service
         public async Task<Supplier> GetSupplierById(int supplierId)
         {
             return await _supplierRepository.GetSupplierById(supplierId);
+        }
+
+        public async Task<ResponseSingleSupplier> GetSupplierReceipts(int supplierId)
+        {
+           return await _supplierRepository.GetSupplierReceipts(supplierId);
         }
 
         public async Task<IEnumerable<Supplier>> GetSuppliers()

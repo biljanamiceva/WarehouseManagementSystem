@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WMS.DataContext;
+using WMS.Domain.Enums;
 using WMS.Domain.Interfaces.Repository;
 using WMS.Domain.Models;
+using WMS.Domain.ResponseModels;
 
 namespace WMS.Repository
 {
@@ -40,6 +42,47 @@ namespace WMS.Repository
                 throw new ArgumentNullException("Entity is null.");
             }
             return supplier;
+        }
+
+        public async Task<ResponseSingleSupplier> GetSupplierReceipts(int supplierId)
+        {
+            var supplier = await _context.Suppliers.Include(r => r.Receipts).ThenInclude(r => r.Product).Where(r => r.SupplierId == supplierId).FirstOrDefaultAsync();
+
+            var response = new ResponseSingleSupplier();
+            if (supplier == null)
+            {
+                throw new Exception("exception");
+            }
+            response.SupplierId = supplier.SupplierId;
+            response.SupplierFullName = supplier.SupplierFullName;
+            response.SupplierEmail = supplier.SupplierEmail;
+            response.SupplierPhoneNumber = supplier.SupplierPhoneNumber;
+            response.SupplierAccountNumber = supplier.SupplierAccountNumber;
+
+            response.ResponseSingleSupplierReceipts = supplier.Receipts.Select(receipt => new ResponseSingleSupplierReceipt
+            {
+                ReceiptId = receipt.ReceiptId,
+                SupplierId = receipt.SupplierId,
+                ReceiptDate = receipt.ReceiptDate,
+                Quantity = receipt.Quantity,
+                Amount = receipt.Amount,
+                ProductName = receipt.Product?.ProductName,
+                ReceiptStatus = receipt.ReceiptStatus,
+            }).ToList();
+
+            // Calculate totals
+            response.TotalReceipts = supplier.Receipts.Count();
+            response.TotalQuantity = supplier.Receipts.Sum(r => r.Quantity);
+            response.ToatlAmount = supplier.Receipts.Sum(r => r.Amount);
+
+            // Calculate Not Paid Receipts count and total sum
+            var notPaidReceipts = supplier.Receipts.Where(r => r.ReceiptStatus == ReceiptStatus.NotPaid);
+            response.NotPaidReceipts = notPaidReceipts.Count();
+            response.TotalNotPaidAmount = notPaidReceipts.Sum(r => r.Amount);
+
+
+
+            return response;
         }
 
         public async Task<IEnumerable<Supplier>> GetSuppliers()
