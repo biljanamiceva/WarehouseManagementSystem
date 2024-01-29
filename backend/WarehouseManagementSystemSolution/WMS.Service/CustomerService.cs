@@ -2,6 +2,7 @@
 using WMS.Domain.Interfaces.Service;
 using WMS.Domain.Models;
 using WMS.Domain.RequestModels;
+using WMS.Domain.ResponseModels;
 
 namespace WMS.Service
 {
@@ -35,6 +36,11 @@ namespace WMS.Service
         public async Task<Customer> GetCustomerById(int customerId)
         {
             return await _customerRepository.GetCustomerById(customerId);
+        }
+
+        public async Task<ResponseSingleCustomer> GetCustomerInvoices(int customerId)
+        {
+            return await _customerRepository.GetCustomerInvoices(customerId);
         }
 
         public async Task<IEnumerable<Customer>> GetCustomers()

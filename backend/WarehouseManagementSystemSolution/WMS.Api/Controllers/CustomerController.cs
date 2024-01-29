@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WMS.Domain.Interfaces.Service;
 using WMS.Domain.Models;
 using WMS.Domain.RequestModels;
+using WMS.Domain.ResponseModels;
 using WMS.Service;
 
 namespace WMS.Api.Controllers
@@ -45,6 +46,12 @@ namespace WMS.Api.Controllers
         public async Task<Customer> GetCustomerById(int customerId)
         {
             return await _customerService.GetCustomerById(customerId);
+        }
+
+        [HttpGet("{customerId}/invoices")]
+        public async Task<ResponseSingleCustomer> GetCustomerInvoices(int customerId)
+        {
+            return await _customerService.GetCustomerInvoices(customerId);
         }
 
     }

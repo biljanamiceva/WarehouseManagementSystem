@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WMS.Domain.Enums;
-using WMS.Domain.Models;
+﻿using WMS.Domain.Enums;
+
 
 namespace WMS.Domain.ResponseModels
 {

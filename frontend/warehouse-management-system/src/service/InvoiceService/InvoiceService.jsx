@@ -29,6 +29,10 @@ const InvoiceService = () => {
         return "Paid";
       case InvoiceStatus.NotPaid:
         return "Not Paid";
+      case InvoiceStatus.Cancelled:
+        return "Cancelled";
+      case InvoiceStatus.Overdue:
+        return "Overdue";
       default:
         return "Unknown Type";
     }
@@ -65,7 +69,7 @@ const InvoiceService = () => {
     <div className="table_details">
       <div className="allData">
         <div className="cardHeader">
-          <h2>All Invoices</h2>
+          <h2>All Invices</h2>
           <Link to="/addInvoice" className="btn">
             Add Invoice
           </Link>
@@ -73,7 +77,7 @@ const InvoiceService = () => {
         {loading ? (
           <p>Loading...</p>
         ) : (
-            <table>
+          <table>
             <thead>
               <tr>
                 <td>#</td>
@@ -90,13 +94,15 @@ const InvoiceService = () => {
                   <td>{index + 1}</td>
                   <td>{invoice.companyName}</td>
                   <td>
-                    {new Date(invoice.paymentDueDate).toLocaleDateString("en-GB")}
+                    {new Date(invoice.paymentDueDate).toLocaleDateString(
+                      "en-GB"
+                    )}
                   </td>
                   <td>{invoice.totalAmount}</td>
                   <td>{mapInvoiceStatusToString(invoice.invoiceStatus)}</td>
                   <td>
-                  <Link to={`/editInvoice/${invoice.invoiceId}`}>
-                    <BiSolidEdit className="app_actionBtn" />
+                    <Link to={`/editInvoice/${invoice.invoiceId}`}>
+                      <BiSolidEdit className="app_actionBtn" />
                     </Link>
                     |
                     <RiDeleteBinLine

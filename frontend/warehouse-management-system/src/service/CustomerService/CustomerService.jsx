@@ -3,6 +3,7 @@ import { BiSolidEdit } from "react-icons/bi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { CustomerType } from "../../constants";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const CustomerService = () => {
@@ -10,6 +11,8 @@ const CustomerService = () => {
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  const navigate = useNavigate();
+  
   useEffect(() => {
     fetchData();
   }, []);
@@ -69,6 +72,10 @@ const CustomerService = () => {
     setShowDeleteModal(false);
     setSelectedCustomerId(null);
   };
+
+  const navigateToInvoices = (customerId) => {
+    navigate(`/customerInfo/${customerId}/invoices`);
+  };
   return (
     <div className="table_details">
       <div className="allData">
@@ -95,7 +102,7 @@ const CustomerService = () => {
             </thead>
             <tbody>
               {data.map((customer, index) => (
-                <tr key={customer.customerId}>
+                  <tr key={customer.customerId} onClick={() => navigateToInvoices(customer.customerId)} style={{cursor: "pointer"}}>
                   <td>{index + 1}</td>
                   <td>{customer.companyName}</td>
                   <td>{customer.customerPhoneNumber}</td>

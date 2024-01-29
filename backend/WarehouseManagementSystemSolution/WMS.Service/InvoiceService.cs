@@ -43,6 +43,19 @@ namespace WMS.Service
             return await _invoiceRepository.GetInvoices();
         }
 
+        public async Task<Invoice> MarkInvoiceAs(int invoiceId, RequestMarkInvoiceAs request)
+        {
+            var invoice = await _invoiceRepository.GetInvoiceById(invoiceId);
+            if (invoice == null)
+            {
+                throw new Exception("Receipt doesn't exist");
+            }
+
+            invoice.InvoiceStatus = request.InvoiceStatus;
+
+            return await _invoiceRepository.UpdateInvoice(invoice);
+        }
+
         public async Task<Invoice> UpdateInvoice(int invoiceId, RequestInvoice request)
         {
             var invoice = await _invoiceRepository.GetInvoiceById(invoiceId);

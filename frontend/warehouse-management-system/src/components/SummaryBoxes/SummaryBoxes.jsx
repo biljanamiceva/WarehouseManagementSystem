@@ -1,14 +1,14 @@
 import React from "react";
 import "./SummaryBoxes.css";
 import { BiEuro } from "react-icons/bi";
-const SummaryBoxes = ({ boxOne, boxTwo, notPaidAmount,  boxThree, boxFour }) => {
+const SummaryBoxes = ({ boxOne, boxTwo, notPaidAmount,  boxThree, boxFour, title }) => {
   return (
     <div className="frameBox">
       <div className="cardBoxes">
         <div className="card1">
           <div>
             <div className="numbers">{boxOne}</div>
-            <div className="cardName">Total receipts</div>
+            <div className="cardName">Total {title}</div>
           </div>
 
           <div className="iconBx"></div>

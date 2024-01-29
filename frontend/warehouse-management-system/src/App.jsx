@@ -13,7 +13,6 @@ import EditProduct from "./service/ProductService/EditProduct";
 import Receipt from "./pages/Receipt/Receipt";
 import AddReceipt from "./service/ReceiptService/AddReceipt";
 import EditReciept from "./service/ReceiptService/EditReciept";
-import InvoiceService from "./service/InvoiceService/InvoiceService";
 import AddInvoice from "./service/InvoiceService/AddInvoice";
 import Invoice from "./pages/Invoice/Invoice";
 import EditInvoice from "./service/InvoiceService/EditInvoice";
@@ -21,6 +20,7 @@ import Order from "./pages/Order/Order";
 import AddOrder from "./service/OrderService/AddOrder";
 import HomePage from "./pages/HomePage/HomePage";
 import SupplierInfo from "./service/SupplierService/SupplierInfo";
+import CustomerInfo from "./service/CustomerService/CustomerInfo";
 
 function App() {
   const [isActive, setIsActive] = useState(false);
@@ -139,6 +139,13 @@ function App() {
           path="/supplierInfo/:supplierId/:receipt"
           element={
             <SupplierInfo isActive={isActive} toggleSidebar={toggleSidebar} />
+          }
+        />
+
+        <Route
+          path="/customerInfo/:customerId/:invoice"
+          element={
+            <CustomerInfo isActive={isActive} toggleSidebar={toggleSidebar} />
           }
         />
       </Routes>

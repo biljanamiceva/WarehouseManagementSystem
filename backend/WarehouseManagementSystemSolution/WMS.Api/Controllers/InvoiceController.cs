@@ -49,5 +49,11 @@ namespace WMS.Api.Controllers
         {
             return await _invoiceService.GetInvoiceById(invoiceId);
         }
+
+        [HttpPut("{invoiceId}/markAs")]
+        public async Task<Invoice> MarkInvoiceAs(int invoiceId, RequestMarkInvoiceAs request)
+        {
+            return await _invoiceService.MarkInvoiceAs(invoiceId, request);
+        }
     }
 }

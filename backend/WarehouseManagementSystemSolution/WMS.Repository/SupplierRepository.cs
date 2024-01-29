@@ -21,7 +21,7 @@ namespace WMS.Repository
         {
             _context.Suppliers.Add(supplier);
             await _context.SaveChangesAsync();
-            return supplier; 
+            return supplier;
         }
 
         public async Task DeleteSupplier(int supplierId)
@@ -80,15 +80,6 @@ namespace WMS.Repository
             response.NotPaidReceipts = notPaidReceipts.Count();
             response.TotalNotPaidAmount = notPaidReceipts.Sum(r => r.Amount);
 
-           // var cancelledNotPaidOverdueReceipts = supplier.Receipts
-            //.Where(r => r.ReceiptStatus == ReceiptStatus.Cancelled ||
-              //  r.ReceiptStatus == ReceiptStatus.NotPaid ||
-                //r.ReceiptStatus == ReceiptStatus.Overdue);
-
-           // response.SumCancelledNotPaidOverdue = cancelledNotPaidOverdueReceipts.Sum(r => r.Amount);
-
-
-
             return response;
         }
 
@@ -101,7 +92,7 @@ namespace WMS.Repository
         {
             _context.Entry(supplier).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return supplier; 
+            return supplier;
         }
     }
 }

@@ -20,5 +20,8 @@ namespace WMS.Domain.Interfaces.Service
 
         // Delete a invoice
         Task DeleteInvoice(int invoiceId);
+
+        //Mark as paid invoice
+        Task<Invoice> MarkInvoiceAs(int invoiceId, RequestMarkInvoiceAs request);
     }
 }

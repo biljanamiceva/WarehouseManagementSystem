@@ -1,5 +1,6 @@
 ﻿using WMS.Domain.Models;
 using WMS.Domain.RequestModels;
+using WMS.Domain.ResponseModels;
 
 namespace WMS.Domain.Interfaces.Service
 {
@@ -18,5 +19,6 @@ namespace WMS.Domain.Interfaces.Service
 
         // Delete a customer
         Task DeleteCustomer(int customerId);
+        Task<ResponseSingleCustomer> GetCustomerInvoices(int customerId);
     }
 }

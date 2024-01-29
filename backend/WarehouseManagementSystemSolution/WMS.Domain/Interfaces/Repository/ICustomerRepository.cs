@@ -1,4 +1,5 @@
 ﻿using WMS.Domain.Models;
+using WMS.Domain.ResponseModels;
 
 namespace WMS.Domain.Interfaces.Repository
 {
@@ -14,5 +15,7 @@ namespace WMS.Domain.Interfaces.Repository
         Task<Customer> UpdateCustomer(Customer customer);
 
         Task DeleteCustomer(int customerId);
+
+        Task<ResponseSingleCustomer> GetCustomerInvoices(int customerId);
     }
 }

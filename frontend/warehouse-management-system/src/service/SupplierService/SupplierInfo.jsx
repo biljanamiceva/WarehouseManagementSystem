@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import Sidebar from "../../components/Slidebar/Sidebar";
 import Navbar from "../../components/Navbar/Navbar";
-import { ReceiptStatus } from "../../constants";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import SummaryBoxes from "../../components/SummaryBoxes/SummaryBoxes";
+import { ReceiptStatus } from "../../constants";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const SupplierInfo = ({ isActive, toggleSidebar }) => {
   const [supplier, setSupplier] = useState({});
@@ -105,6 +105,7 @@ const SupplierInfo = ({ isActive, toggleSidebar }) => {
           notPaidAmount={supplier.totalNotPaidAmount}
           boxThree={supplier.totalQuantity}
           boxFour={supplier.toatlAmount}
+          title={"Receipts"}
         />
         <div className="table_details">
           <div className="allData">
