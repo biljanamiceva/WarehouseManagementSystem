@@ -162,6 +162,8 @@ const AddReceipt = ({ isActive, toggleSidebar }) => {
                 <option>Select status</option>
                 <option value="1">Paid</option>
                 <option value="2">Not Paid</option>
+                <option value="3">Cancelled</option>
+                <option value="4">Overdue</option>
               </select>
             </div>
 

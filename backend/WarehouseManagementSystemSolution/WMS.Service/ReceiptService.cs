@@ -1,4 +1,5 @@
-﻿using WMS.Domain.Interfaces.Repository;
+﻿using WMS.Domain.Enums;
+using WMS.Domain.Interfaces.Repository;
 using WMS.Domain.Interfaces.Service;
 using WMS.Domain.Models;
 using WMS.Domain.RequestModels;
@@ -56,6 +57,26 @@ namespace WMS.Service
             receipt.ReceiptDate = request.ReceiptDate;
             receipt.Quantity = request.Quantity;
             receipt.Amount = request.Amount;
+            receipt.ReceiptStatus = request.ReceiptStatus;
+
+            return await _receiptRepository.UpdateReceipt(receipt);
+        }
+
+        public async Task<Receipt> MarkReceiptAs(int receiptId, RequestMarkReceiptAs request)
+        {
+            var receipt = await _receiptRepository.GetReceiptById(receiptId);
+            if (receipt == null)
+            {
+                throw new Exception("Receipt doesn't exist");
+            }
+
+            // Check if the receipt is not already paid
+            //if (receipt.ReceiptStatus == ReceiptStatus.Paid)
+            //{
+                //throw new Exception("Receipt is already marked as paid");
+            //}
+
+            // Update receipt status to 
             receipt.ReceiptStatus = request.ReceiptStatus;
 
             return await _receiptRepository.UpdateReceipt(receipt);

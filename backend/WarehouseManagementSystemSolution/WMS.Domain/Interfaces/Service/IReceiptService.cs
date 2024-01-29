@@ -19,5 +19,8 @@ namespace WMS.Domain.Interfaces.Service
 
         // Delete a receipt
         Task DeleteReceipt(int receiptId);
+
+        //Mark as paid receipt
+        Task<Receipt> MarkReceiptAs(int receiptId, RequestMarkReceiptAs request);
     }
 }

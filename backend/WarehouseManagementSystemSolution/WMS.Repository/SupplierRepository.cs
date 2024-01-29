@@ -76,9 +76,16 @@ namespace WMS.Repository
             response.ToatlAmount = supplier.Receipts.Sum(r => r.Amount);
 
             // Calculate Not Paid Receipts count and total sum
-            var notPaidReceipts = supplier.Receipts.Where(r => r.ReceiptStatus == ReceiptStatus.NotPaid);
+            var notPaidReceipts = supplier.Receipts.Where(r => r.ReceiptStatus == ReceiptStatus.NotPaid || r.ReceiptStatus == ReceiptStatus.Cancelled || r.ReceiptStatus == ReceiptStatus.Overdue);
             response.NotPaidReceipts = notPaidReceipts.Count();
             response.TotalNotPaidAmount = notPaidReceipts.Sum(r => r.Amount);
+
+           // var cancelledNotPaidOverdueReceipts = supplier.Receipts
+            //.Where(r => r.ReceiptStatus == ReceiptStatus.Cancelled ||
+              //  r.ReceiptStatus == ReceiptStatus.NotPaid ||
+                //r.ReceiptStatus == ReceiptStatus.Overdue);
+
+           // response.SumCancelledNotPaidOverdue = cancelledNotPaidOverdueReceipts.Sum(r => r.Amount);
 
 
 

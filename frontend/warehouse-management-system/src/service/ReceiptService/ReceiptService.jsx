@@ -29,6 +29,10 @@ const ReceiptService = () => {
         return "Paid";
       case ReceiptStatus.NotPaid:
         return "Not Paid";
+      case ReceiptStatus.Cancelled:
+        return "Cancelled";
+      case ReceiptStatus.Overdue:
+        return "Overdue";
       default:
         return "Unknown Type";
     }
@@ -100,8 +104,8 @@ const ReceiptService = () => {
                   <td>{receipt.amount}</td>
                   <td>{mapReceiptStatusToString(receipt.receiptStatus)}</td>
                   <td>
-                  <Link to={`/editReceipt/${receipt.receiptId}`}>
-                    <BiSolidEdit className="app_actionBtn" />
+                    <Link to={`/editReceipt/${receipt.receiptId}`}>
+                      <BiSolidEdit className="app_actionBtn" />
                     </Link>
                     |
                     <RiDeleteBinLine

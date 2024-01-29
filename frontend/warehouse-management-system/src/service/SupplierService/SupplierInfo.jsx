@@ -6,9 +6,12 @@ import { ReceiptStatus } from "../../constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SummaryBoxes from "../../components/SummaryBoxes/SummaryBoxes";
+
 const SupplierInfo = ({ isActive, toggleSidebar }) => {
   const [supplier, setSupplier] = useState({});
   const [loading, setLoading] = useState(true);
+  const [selectedReceipt, setSelectedReceipt] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const { supplierId } = useParams();
 
@@ -20,6 +23,7 @@ const SupplierInfo = ({ isActive, toggleSidebar }) => {
     axios
       .get(`https://localhost:7076/api/supplier/${supplierId}/receipts`)
       .then((response) => {
+        console.log("Supplier API Response:", response.data);
         setSupplier(response.data);
         setLoading(false);
       })
@@ -28,19 +32,66 @@ const SupplierInfo = ({ isActive, toggleSidebar }) => {
         setLoading(false);
       });
   };
-
   const mapReceiptStatusToString = (receiptStatus) => {
     switch (receiptStatus) {
-      case ReceiptStatus.Paid:
+      case 1:
+      case "Paid":
         return "Paid";
-      case ReceiptStatus.NotPaid:
+      case 2:
+      case "NotPaid":
         return "Not Paid";
+      case 3:
+      case "Cancelled":
+        return "Cancelled";
+      case 4:
+      case "Overdue":
+        return "Overdue";
       default:
         return "Unknown Type";
     }
   };
+
   const handleBack = () => {
     navigate("/supplier");
+  };
+
+  const handleChangeStatus = (newStatus) => {
+    console.log("New Status:", newStatus);
+
+    axios
+      .put(
+        `https://localhost:7076/api/receipt/${selectedReceipt.receiptId}/markAs`,
+        {
+          receiptStatus: newStatus, // Use 'receiptStatus' instead of 'newStatus'
+        }
+      )
+      .then((response) => {
+        console.log("Success response:", response);
+        const updatedReceipt = {
+          ...selectedReceipt,
+          receiptStatus: newStatus,
+        };
+
+        setSupplier((prevSupplier) => {
+          const updatedReceipts = (
+            prevSupplier.responseSingleSupplierReceipts || []
+          ).map((receipt) =>
+            receipt.receiptId === selectedReceipt.receiptId
+              ? updatedReceipt
+              : receipt
+          );
+
+          return {
+            ...prevSupplier,
+            responseSingleSupplierReceipts: updatedReceipts,
+          };
+        });
+        setShowModal(false);
+      })
+      .catch((error) => {
+        console.error("Error changing status:", error);
+        setShowModal(false);
+      });
   };
 
   return (
@@ -74,11 +125,12 @@ const SupplierInfo = ({ isActive, toggleSidebar }) => {
                     <td>Date</td>
                     <td>Quantity</td>
                     <td>Amount</td>
-                    <td>Status</td>
+                    <td>Payment</td>
+                    <td>Actions</td>
                   </tr>
                 </thead>
                 <tbody>
-                  {supplier.responseSingleSupplierReceipts.map(
+                  {(supplier.responseSingleSupplierReceipts || []).map(
                     (receipt, index) => (
                       <tr key={receipt.receiptId}>
                         <td>{index + 1}</td>
@@ -88,8 +140,8 @@ const SupplierInfo = ({ isActive, toggleSidebar }) => {
                             "en-GB"
                           )}
                         </td>
-                        <td>{receipt.quantity}  kg</td>
-                        <td>{receipt.amount}  €</td>
+                        <td>{receipt.quantity} kg</td>
+                        <td>{receipt.amount} €</td>
                         <td>
                           <span
                             className={`status ${
@@ -98,11 +150,28 @@ const SupplierInfo = ({ isActive, toggleSidebar }) => {
                                 : receipt.receiptStatus ===
                                   ReceiptStatus.NotPaid
                                 ? "not-paid"
+                                : receipt.receiptStatus ===
+                                  ReceiptStatus.Cancelled
+                                ? "cancelled"
+                                : receipt.receiptStatus ===
+                                  ReceiptStatus.Overdue
+                                ? "overdue"
                                 : ""
                             }`}
                           >
                             {mapReceiptStatusToString(receipt.receiptStatus)}
                           </span>
+                        </td>
+                        <td>
+                          <button
+                            className="changeBtn"
+                            onClick={() => {
+                              setSelectedReceipt(receipt);
+                              setShowModal(true);
+                            }}
+                          >
+                            Change Status
+                          </button>
                         </td>
                       </tr>
                     )
@@ -112,6 +181,28 @@ const SupplierInfo = ({ isActive, toggleSidebar }) => {
             )}
           </div>
         </div>
+        {showModal && (
+          <div className="modal">
+            <div className="modal-content">
+              <p>Change receipt status for {selectedReceipt.productName}</p>
+              <button onClick={() => handleChangeStatus(ReceiptStatus.Paid)}>
+                Mark as Paid
+              </button>
+              <button onClick={() => handleChangeStatus(ReceiptStatus.NotPaid)}>
+                Mark as Not Paid
+              </button>
+              <button
+                onClick={() => handleChangeStatus(ReceiptStatus.Cancelled)}
+              >
+                Mark as Cancelled
+              </button>
+              <button onClick={() => handleChangeStatus(ReceiptStatus.Overdue)}>
+                Mark as Overdue
+              </button>
+              <button onClick={() => setShowModal(false)}>Cancel</button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

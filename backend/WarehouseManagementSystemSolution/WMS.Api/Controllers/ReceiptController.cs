@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WMS.Domain.Enums;
 using WMS.Domain.Interfaces.Service;
 using WMS.Domain.Models;
 using WMS.Domain.RequestModels;
@@ -45,10 +46,15 @@ namespace WMS.Api.Controllers
 
         [HttpGet("{receiptId}")]
         public async Task<Receipt> GetReceiptById(int receiptId)
-        {
+        {   
             return await _receiptService.GetReceiptById(receiptId);
         }
 
-      
+        [HttpPut("{receiptId}/markAs")]
+        public async Task<Receipt> MarkReceiptAs(int receiptId, RequestMarkReceiptAs request)
+        {
+            return await _receiptService.MarkReceiptAs(receiptId, request);
+        }
+
     }
 }

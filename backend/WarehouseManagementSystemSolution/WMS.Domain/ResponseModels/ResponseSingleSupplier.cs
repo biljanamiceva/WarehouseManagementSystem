@@ -21,6 +21,8 @@ namespace WMS.Domain.ResponseModels
 
         public int NotPaidReceipts { get; set; }
 
+       // public decimal SumCancelledNotPaidOverdue { get; set; }
+
         public decimal TotalNotPaidAmount { get; set; }
 
         public IEnumerable<ResponseSingleSupplierReceipt> ResponseSingleSupplierReceipts { get; set; }
