@@ -85,10 +85,6 @@ const SupplierService = ({ searchInput }) => {
     setSelectedSupplierId(null);
   };
 
-  // const navigateToReceipts = (supplierId) => {
-  //   window.location.href = `/supplierInfo/${supplierId}/receipts`;
-  // };
-
   const navigateToReceipts = (supplierId) => {
     navigate(`/supplierInfo/${supplierId}/receipts`);
   };

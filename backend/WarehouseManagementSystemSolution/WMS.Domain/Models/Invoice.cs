@@ -10,9 +10,7 @@ namespace WMS.Domain.Models
         public int TotalAmount { get; set; }
         public InvoiceStatus InvoiceStatus { get; set; }
         public int CustomerId { get; set; } // Foreign key
-
         public Customer? Customer { get; set; }  // Reference to the Customer
-
         public int? OrderId { get; set; } // Foreign key
         public Order? Order { get; set; }      // Reference to the Order
     }

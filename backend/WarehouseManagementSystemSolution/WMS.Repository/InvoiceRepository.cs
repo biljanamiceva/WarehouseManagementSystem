@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WMS.DataContext;
 using WMS.Domain.Interfaces.Repository;
 using WMS.Domain.Models;

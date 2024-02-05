@@ -1,5 +1,4 @@
-﻿using WMS.Domain.Enums;
-using WMS.Domain.Interfaces.Repository;
+﻿using WMS.Domain.Interfaces.Repository;
 using WMS.Domain.Interfaces.Service;
 using WMS.Domain.Models;
 using WMS.Domain.RequestModels;
@@ -12,9 +11,12 @@ namespace WMS.Service
 
         private readonly IReceiptRepository _receiptRepository;
 
-        public ReceiptService(IReceiptRepository receiptRepository)
+        private readonly IProductRepository _productRepository;
+
+        public ReceiptService(IReceiptRepository receiptRepository, IProductRepository productRepository)
         {
             _receiptRepository = receiptRepository;
+            _productRepository = productRepository;
         }
 
         public async Task<Receipt> AddReceipt(RequestReceipt request)
@@ -27,11 +29,35 @@ namespace WMS.Service
             receipt.ReceiptStatus = request.ReceiptStatus;
             receipt.SupplierId = request.SupplierId;
             receipt.ProductId = request.ProductId;
+
+            var product = await _productRepository.GetProductById(request.ProductId);
+
+            if (product == null)
+            {
+                throw new Exception("Product not found");
+            }
+            product.ProductQuantityInStock += request.Quantity;
+
+            await _productRepository.UpdateProduct(product);
+
             return await _receiptRepository.AddReceipt(receipt);
         }
 
         public async Task DeleteReceipt(int receiptId)
         {
+
+            var receipt = await _receiptRepository.GetReceiptById(receiptId);
+            if (receipt == null)
+            {
+                throw new Exception("Receipt not found");
+            }
+            var product = await _productRepository.GetProductById(receipt.ProductId);
+           
+
+            product.ProductQuantityInStock -= receipt.Quantity;
+
+            await _productRepository.UpdateProduct(product);
+
             await _receiptRepository.DeleteReceipt(receiptId);
         }
 

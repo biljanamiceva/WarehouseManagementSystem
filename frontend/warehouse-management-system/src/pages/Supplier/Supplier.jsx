@@ -5,7 +5,7 @@ import SupplierService from "../../service/SupplierService/SupplierService";
 import CardBox from "../../components/CardBox/CardBox";
 import axios from "axios";
 
-const Supplier = ({ isActive, toggleSidebar, title }) => {
+const Supplier = ({ isActive, toggleSidebar}) => {
   const [searchInput, setSearchInput] = useState("");
   const [totalSuppliers, setTotalSuppliers] = useState(0);
   const [suppliers, setSuppliers] = useState([]);

@@ -69,7 +69,7 @@ const InvoiceService = () => {
     <div className="table_details">
       <div className="allData">
         <div className="cardHeader">
-          <h2>All Invices</h2>
+          <h2>All Invoices</h2>
           <Link to="/addInvoice" className="btn">
             Add Invoice
           </Link>
@@ -99,7 +99,23 @@ const InvoiceService = () => {
                     )}
                   </td>
                   <td>{invoice.totalAmount}</td>
-                  <td>{mapInvoiceStatusToString(invoice.invoiceStatus)}</td>
+                  <td>
+                    <span
+                      className={`status ${
+                        invoice.invoiceStatus === InvoiceStatus.Paid
+                          ? "paid"
+                          : invoice.invoiceStatus === InvoiceStatus.NotPaid
+                          ? "not-paid"
+                          : invoice.invoiceStatus === InvoiceStatus.Cancelled
+                          ? "cancelled"
+                          : invoice.invoiceStatus === InvoiceStatus.Overdue
+                          ? "overdue"
+                          : ""
+                      }`}
+                    >
+                      {mapInvoiceStatusToString(invoice.invoiceStatus)}
+                    </span>
+                  </td>
                   <td>
                     <Link to={`/editInvoice/${invoice.invoiceId}`}>
                       <BiSolidEdit className="app_actionBtn" />

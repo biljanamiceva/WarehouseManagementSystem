@@ -100,9 +100,25 @@ const ReceiptService = () => {
                     {new Date(receipt.receiptDate).toLocaleDateString("en-GB")}
                   </td>
                   <td>{receipt.productName}</td>
-                  <td>{receipt.quantity}</td>
-                  <td>{receipt.amount}</td>
-                  <td>{mapReceiptStatusToString(receipt.receiptStatus)}</td>
+                  <td>{receipt.quantity}  kg</td>
+                  <td>{receipt.amount}  €</td>
+                  <td>
+                    <span
+                      className={`status ${
+                        receipt.receiptStatus === ReceiptStatus.Paid
+                          ? "paid"
+                          : receipt.receiptStatus === ReceiptStatus.NotPaid
+                          ? "not-paid"
+                          : receipt.receiptStatus === ReceiptStatus.Cancelled
+                          ? "cancelled"
+                          : receipt.receiptStatus === ReceiptStatus.Overdue
+                          ? "overdue"
+                          : ""
+                      }`}
+                    >
+                      {mapReceiptStatusToString(receipt.receiptStatus)}
+                    </span>
+                  </td>
                   <td>
                     <Link to={`/editReceipt/${receipt.receiptId}`}>
                       <BiSolidEdit className="app_actionBtn" />

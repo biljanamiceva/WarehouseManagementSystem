@@ -1,5 +1,4 @@
-﻿
-using WMS.Domain.Enums;
+﻿using WMS.Domain.Enums;
 
 namespace WMS.Domain.RequestModels
 {

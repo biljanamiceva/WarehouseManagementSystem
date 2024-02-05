@@ -1,6 +1,5 @@
 ﻿using WMS.Domain.Enums;
 
-
 namespace WMS.Domain.ResponseModels
 {
     public class ResponseSingleSupplierReceipt

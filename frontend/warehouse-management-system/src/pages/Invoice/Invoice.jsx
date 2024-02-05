@@ -5,7 +5,7 @@ import CardBox from "../../components/CardBox/CardBox";
 import InvoiceService from "../../service/InvoiceService/InvoiceService";
 import axios from "axios";
 
-const Invoice = ({ isActive, toggleSidebar, title }) => {
+const Invoice = ({ isActive, toggleSidebar}) => {
   const [totalInvoices, setTotalInvoices] = useState(0);
   const [invoices, setInvoices] = useState([]);
 

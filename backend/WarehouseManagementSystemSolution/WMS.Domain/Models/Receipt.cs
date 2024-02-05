@@ -6,7 +6,7 @@ namespace WMS.Domain.Models
     {
         public int ReceiptId { get; set; }
         public DateTime ReceiptDate { get; set; }
-        public int? Quantity { get; set;}
+        public int Quantity { get; set;}
 
         public decimal Amount { get; set; }
 

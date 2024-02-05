@@ -97,8 +97,22 @@ const ProductService = () => {
                   <td>{index + 1}</td>
                   <td>{product.productName}</td>
                   <td>{product.productQuantityInStock} kg</td>
-                  <td>{product.productPrice}</td>
-                  <td>{mapProductStatusToString(product.productStatus)}</td>
+                  <td>{product.productPrice}  €</td>
+                  <td>
+                    <span
+                      className={`status ${
+                        product.productStatus === ProductStatus.InStock
+                          ? "inStock"
+                          : product.productStatus === ProductStatus.LowStock
+                          ? "lowStock"
+                          : product.productStatus === ProductStatus.OutOfStock
+                          ? "outOfStock"
+                          : ""
+                      }`}
+                    >
+                      {mapProductStatusToString(product.productStatus)}
+                    </span>
+                  </td>
                   <td>
                     <Link to={`/editProduct/${product.productId}`}>
                       <BiSolidEdit className="app_actionBtn" />

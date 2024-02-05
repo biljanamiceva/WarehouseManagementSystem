@@ -1,6 +1,4 @@
-﻿
-
-namespace WMS.Domain.Enums
+﻿namespace WMS.Domain.Enums
 {
     public enum ReceiptStatus
     {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WMS.Domain.Models;
+﻿using WMS.Domain.Models;
 using WMS.Domain.ResponseModels;
 
 namespace WMS.Domain.Interfaces.Repository

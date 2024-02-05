@@ -12,7 +12,7 @@ using WMS.DataContext;
 namespace WMS.DataContext.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231225165110_InitialMigration")]
+    [Migration("20240130090732_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -95,6 +95,9 @@ namespace WMS.DataContext.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
@@ -102,6 +105,8 @@ namespace WMS.DataContext.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("OrderId");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
                 });
@@ -173,7 +178,7 @@ namespace WMS.DataContext.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Quantity")
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ReceiptDate")
@@ -236,6 +241,17 @@ namespace WMS.DataContext.Migrations
                     b.Navigation("Order");
                 });
 
+            modelBuilder.Entity("WMS.Domain.Models.Order", b =>
+                {
+                    b.HasOne("WMS.Domain.Models.Customer", "Customer")
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("WMS.Domain.Models.OrderProducts", b =>
                 {
                     b.HasOne("WMS.Domain.Models.Order", "Order")
@@ -277,6 +293,8 @@ namespace WMS.DataContext.Migrations
             modelBuilder.Entity("WMS.Domain.Models.Customer", b =>
                 {
                     b.Navigation("Invoices");
+
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("WMS.Domain.Models.Order", b =>

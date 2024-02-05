@@ -5,7 +5,6 @@ namespace WMS.Domain.Interfaces.Repository
 {
     public interface ICustomerRepository
     {
-
         Task<IEnumerable<Customer>> GetCustomers();
 
         Task<Customer> GetCustomerById(int customerId);

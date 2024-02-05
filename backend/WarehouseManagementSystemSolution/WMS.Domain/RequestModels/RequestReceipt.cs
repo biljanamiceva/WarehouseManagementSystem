@@ -1,5 +1,4 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using WMS.Domain.Enums;
 
 namespace WMS.Domain.RequestModels
@@ -9,12 +8,11 @@ namespace WMS.Domain.RequestModels
         [Required]
         public DateTime ReceiptDate { get; set; }
         [Required]
-        public int? Quantity { get; set; }
+        public int Quantity { get; set; }
         [Required]
         public decimal Amount { get; set; }
         public int SupplierId { get; set; }
         public int ProductId { get; set; } 
-
         [Required]
         public ReceiptStatus ReceiptStatus { get; set; }
     }

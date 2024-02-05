@@ -9,5 +9,6 @@ namespace WMS.Domain.RequestModels
         public List<int> ProductIds { get; set; } = new List<int>();
         public OrderStatus OrderStatus { get; set; }
         public int CustomerId { get; set; }
+        public int ProductId { get; set; }
     }
 }

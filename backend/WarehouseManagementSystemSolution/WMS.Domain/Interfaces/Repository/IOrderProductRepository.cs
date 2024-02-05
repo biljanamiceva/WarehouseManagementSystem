@@ -1,5 +1,4 @@
-﻿
-using WMS.Domain.Models;
+﻿using WMS.Domain.Models;
 
 namespace WMS.Domain.Interfaces.Repository
 {

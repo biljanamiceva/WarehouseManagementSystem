@@ -96,7 +96,26 @@ const OrderService = () => {
                   <td>{index + 1}</td>
                   <td>{order.companyName}</td>
                   <td>{order.totalAmount}</td>
-                  <td>{mapOrderStatusToString(order.orderStatus)}</td>
+                  <td>
+                          <span
+                            className={`status ${
+                              order.orderStatus === OrderStatus.Processing
+                                ? "processing"
+                                : order.orderStatus ===
+                                OrderStatus.Shipped
+                                ? "shipped"
+                                : order.orderStatus ===
+                                OrderStatus.Delivered
+                                ? "delivered"
+                                : order.orderStatus ===
+                                OrderStatus.PartiallyShipped
+                                ? "partiallyShipped"
+                                : ""
+                            }`}
+                          >
+                          {mapOrderStatusToString(order.orderStatus)}
+                          </span>
+                        </td>
                  
                   <td>
                     <Link to={`/editOrder/${order.orderId}`}>
