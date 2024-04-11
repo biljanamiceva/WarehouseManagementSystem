@@ -4,6 +4,7 @@ import { MenuOutline, SearchOutline } from "react-ionicons";
 
 import { images } from "../../constants";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = ({ toggleSidebar, handleSearchInputChange }) => {
   const [searchInput, setSearchInput] = useState("");
@@ -12,6 +13,7 @@ const Navbar = ({ toggleSidebar, handleSearchInputChange }) => {
     setSearchInput(e.target.value);
     handleSearchInputChange(e.target.value);
   };
+  const role = localStorage.getItem("role");
   return (
     <div className="topbar">
       <div className="toggle" onClick={toggleSidebar}>

@@ -54,15 +54,17 @@
 .homePageBtn {
   position: absolute;
   right: 2%;
+  top: 2%;
 }
 
-.signInButton {
+ .signInButton {
   margin-left: 30px;
-  margin-top: 30px;
+  margin-top: 40px;
   color: white;
   border: 1px solid var(--blue);
   background-color: var(--blue);
   border-radius: 10px;
   width: 85px;
   height: 35px;
+  padding: 7px;
 }

@@ -11,11 +11,12 @@ const AddOrder = ({ isActive, toggleSidebar }) => {
     customerId: "",  // Assuming you have a customerId field
     productIds: [],
     quantities: [],
+    orderTitle: "",
   });
   const [errors, setErrors] = useState({});
   const [customers, setCustomers] = useState([]);
   const [products, setProducts] = useState([]);
-
+  const accessToken = localStorage.getItem("accessToken");
   useEffect(() => {
     fetchCustomers();
     fetchProducts();
@@ -23,7 +24,10 @@ const AddOrder = ({ isActive, toggleSidebar }) => {
 
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get("https://localhost:7076/api/Customer");
+      const response = await axios.get("https://localhost:7076/api/Customer",
+      {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
       setCustomers(response.data);
     } catch (error) {
       console.error("Error fetching customers:", error);
@@ -32,7 +36,10 @@ const AddOrder = ({ isActive, toggleSidebar }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("https://localhost:7076/api/Product");
+      const response = await axios.get("https://localhost:7076/api/Product",
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
       setProducts(response.data);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -79,6 +86,7 @@ const AddOrder = ({ isActive, toggleSidebar }) => {
       .post("https://localhost:7076/api/Order", orderData, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`
         },
       })
       .then((response) => {
@@ -111,6 +119,16 @@ const AddOrder = ({ isActive, toggleSidebar }) => {
             <h2>Add Order</h2>
           </div>
           <form className="add-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+              <label>Order Title</label>
+              <input
+                type="text"
+                name="orderTitle"
+                value={order.orderTitle}
+                onChange={handleChange}
+                placeholder="Enter order title"
+              />
+            </div>
             <div className="form-group">
               <label>Order Status</label>
               <select
@@ -122,9 +140,9 @@ const AddOrder = ({ isActive, toggleSidebar }) => {
                 <option value="1">Processing</option>
                 <option value="2">Shipped</option>
                 <option value="3">Delivered</option>
-                <option value="4">Partially Shipped</option>
               </select>
             </div>
+            
             <div className="form-group">
               <label>Customer</label>
               <select
@@ -175,6 +193,7 @@ const AddOrder = ({ isActive, toggleSidebar }) => {
                 Add Product
               </button>
             </div>
+            
             <div className="addActions">
               <button className="addBtn" type="submit">
                 Add Order

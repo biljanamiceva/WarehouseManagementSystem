@@ -6,8 +6,10 @@ namespace WMS.Domain.RequestModels
     public class RequestInvoice
     {
         public DateTime PaymentDueDate { get; set; }
-        public int TotalAmount { get; set; }
+      
         public InvoiceStatus InvoiceStatus { get; set; }
         public int CustomerId { get; set; }
+        public int OrderId { get; set; }
+
     }
 }

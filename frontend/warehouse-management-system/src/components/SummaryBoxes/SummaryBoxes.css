@@ -1,18 +1,34 @@
-.frameBox{
-    padding: 20px;
+.frameBox {
+  padding: 20px;
+  margin-top: 20px;
 }
-.cardBoxes {
+
+.summarybox {
   position: relative;
   width: 100%;
+  padding: 20px;
+  box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+  display: block;
+
+}
+.cardBoxes{
   padding: 20px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 30px;
-  box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
-  border-radius: 20px;
+}
+.summaryHeader {
+  text-align: start;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: var(--blue);
 }
 
- .card1, .card2, .card3, .card4 {
+.card1,
+.card2,
+.card3,
+.card4 {
   position: relative;
   padding: 30px;
   border-radius: 20px;
@@ -21,23 +37,23 @@
   cursor: pointer;
 }
 
-.card1{
-    background-color: #FFE2E5;
+.card1 {
+  background-color: #ffe2e5;
 }
 
-.card2{
-    background-color: #FFF4DE;
+.card2 {
+  background-color: #fff4de;
 }
 
-.card3{
-    background-color: #DCFCE7;
+.card3 {
+  background-color: #dcfce7;
 }
 
-.card4{
-    background-color: #DFF2FF;
+.card4 {
+  background-color: #dff2ff;
 }
 
- .numbers {
+.numbers {
   position: relative;
   font-weight: 400;
   font-size: 2.2rem;
@@ -50,12 +66,10 @@
   margin-top: 5px;
 }
 
- .iconBox .cardIcon {
+.iconBox .cardIcon {
   font-size: 2.5rem;
   color: var(--black2);
 }
-
-
 
 @media (max-width: 991px) {
   .cardBoxes {
@@ -72,8 +86,5 @@
 @media (max-width: 586px) {
   .cardBoxes {
     grid-template-columns: repeat(1, 1fr);
-  }
-  .cardHeader h2 {
-    font-size: 20px;
   }
 }

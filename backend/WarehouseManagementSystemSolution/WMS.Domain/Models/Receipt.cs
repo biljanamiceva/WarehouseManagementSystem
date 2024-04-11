@@ -8,7 +8,7 @@ namespace WMS.Domain.Models
         public DateTime ReceiptDate { get; set; }
         public int Quantity { get; set;}
 
-        public decimal Amount { get; set; }
+        public int Amount { get; set; }
 
         public ReceiptStatus ReceiptStatus { get; set; }
 

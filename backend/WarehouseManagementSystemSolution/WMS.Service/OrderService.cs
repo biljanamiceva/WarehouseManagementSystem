@@ -25,9 +25,10 @@ namespace WMS.Service
         public async Task<int> AddOrder(RequestOrder request)
         {
             var order = new Order();
-
+            order.OrderTitle = request.OrderTitle;
             order.OrderStatus = request.OrderStatus;
             order.CustomerId = request.CustomerId;
+            
             var productIds = request.ProductIds?.ToList();
             var products = await _productRepository.GetProductsByIds(productIds!);
 
@@ -49,6 +50,7 @@ namespace WMS.Service
                     ProductId = product.ProductId,
                     OrderId = order.OrderId,
                     Quantity = quantity,
+                   
                     Amount = (quantity * product.ProductPrice)
                 };
                 order.TotalAmount += (int)orderProducts.Amount;
@@ -74,19 +76,77 @@ namespace WMS.Service
             return await _orderRepository.GetOrders();
         }
 
+        public async Task<Order> MarkReceiptAs(int orderId, RequestMarkOrderAs request)
+        {
+            var order = await _orderRepository.GetOrderById(orderId);
+            if (order == null)
+            {
+                throw new Exception("Order doesn't exist");
+            }
+   
+            order.OrderStatus = request.OrderStatus;
+
+            return await _orderRepository.UpdateOrder(order);
+        }
+
         public async Task<Order> UpdateOrder(int orderId, RequestOrder request)
         {
             var order = await _orderRepository.GetOrderById(orderId);
 
             if (order == null)
             {
-                throw new exception("Order doesn't exist");
+                throw new Exception("Order doesn't exist");
             }
 
-
             order.OrderStatus = request.OrderStatus;
+            order.CustomerId=request.CustomerId;
+            order.OrderTitle=request.OrderTitle;
+
+            // Update order products if necessary (e.g., change quantities)
+            var productIds = request.ProductIds?.ToList();
+            var products = await _productRepository.GetProductsByIds(productIds!);
+
+            if (products.Count() != request.Quantities.Count())
+            {
+                throw new Exception("Product and Quantity count do not match");
+            }
+
+            for (int i = 0; i < products.Count; i++)
+            {
+                var product = products[i];
+                var quantity = request.Quantities[i];
+
+                var existingOrderProduct = order.OrderProducts.FirstOrDefault(op => op.ProductId == product.ProductId);
+                if (existingOrderProduct != null)
+                {
+                    // Update existing order product quantity and amount
+                    existingOrderProduct.Quantity = quantity;
+                    existingOrderProduct.Amount = quantity * product.ProductPrice;
+
+                    // Update total amount of the order
+                    order.TotalAmount -= existingOrderProduct.Amount;
+                    order.TotalAmount += (quantity * product.ProductPrice);
+                }
+                else
+                {
+                    // Add new order product if not already present
+                    var orderProduct = new OrderProducts()
+                    {
+                        ProductId = product.ProductId,
+                        OrderId = order.OrderId,
+                        Quantity = quantity,
+                        Amount = quantity * product.ProductPrice
+                    };
+                    order.TotalAmount += (int)orderProduct.Amount;
+                    order.OrderProducts.Add(orderProduct);
+                }
+
+                // Update product quantity in stock (assuming this is necessary for your business logic)
+                product.ProductQuantityInStock -= quantity;
+            }
 
             return await _orderRepository.UpdateOrder(order);
         }
+
     }
 }

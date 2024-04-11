@@ -1,4 +1,5 @@
-﻿using WMS.Domain.Interfaces.Repository;
+﻿using System.Diagnostics;
+using WMS.Domain.Interfaces.Repository;
 using WMS.Domain.Interfaces.Service;
 using WMS.Domain.Models;
 using WMS.Domain.RequestModels;
@@ -25,7 +26,7 @@ namespace WMS.Service
 
             receipt.ReceiptDate = request.ReceiptDate;
             receipt.Quantity = request.Quantity;
-            receipt.Amount = request.Amount;
+            //receipt.Amount = request.Amount;
             receipt.ReceiptStatus = request.ReceiptStatus;
             receipt.SupplierId = request.SupplierId;
             receipt.ProductId = request.ProductId;
@@ -37,6 +38,7 @@ namespace WMS.Service
                 throw new Exception("Product not found");
             }
             product.ProductQuantityInStock += request.Quantity;
+            receipt.Amount = receipt.Amount + (receipt.Quantity * product.ProductPrice);
 
             await _productRepository.UpdateProduct(product);
 
@@ -82,7 +84,7 @@ namespace WMS.Service
 
             receipt.ReceiptDate = request.ReceiptDate;
             receipt.Quantity = request.Quantity;
-            receipt.Amount = request.Amount;
+            //receipt.Amount = request.Amount;
             receipt.ReceiptStatus = request.ReceiptStatus;
 
             return await _receiptRepository.UpdateReceipt(receipt);

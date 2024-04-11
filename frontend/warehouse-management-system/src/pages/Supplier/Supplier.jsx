@@ -8,26 +8,16 @@ import axios from "axios";
 const Supplier = ({ isActive, toggleSidebar}) => {
   const [searchInput, setSearchInput] = useState("");
   const [totalSuppliers, setTotalSuppliers] = useState(0);
-  const [suppliers, setSuppliers] = useState([]);
 
   const handleSearchInputChange = (value) => {
     setSearchInput(value);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("https://localhost:7076/api/Supplier");
-        setSuppliers(response.data);
-        setTotalSuppliers(response.data.length);
-      } catch (error) {
-        console.error("Error fetching suppliers:", error);
-      }
-    };
-
-    fetchData();
-  }, [suppliers]);
-
+  const handleSupliersChange = (value) => {
+    console.log(value);
+    console.log(value.length);
+    setTotalSuppliers(value.length);
+  }
   return (
     <div className="container">
       <Sidebar isActive={isActive} />
@@ -40,6 +30,7 @@ const Supplier = ({ isActive, toggleSidebar}) => {
         <SupplierService
           searchInput={searchInput}
           handleSearchInputChange={handleSearchInputChange}
+          handleSupliersChange={handleSupliersChange}
         />
       </div>
     </div>

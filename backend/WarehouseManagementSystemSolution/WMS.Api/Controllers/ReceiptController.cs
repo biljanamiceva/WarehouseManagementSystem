@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using GemBox.Document.Tables;
+using GemBox.Document;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WMS.Domain.Enums;
 using WMS.Domain.Interfaces.Service;
@@ -11,13 +14,18 @@ namespace WMS.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ReceiptController : ControllerBase
     {
         private readonly IReceiptService _receiptService;
+        private readonly IProductService _productService;
 
-        public ReceiptController(IReceiptService receiptService)
+        public ReceiptController(IReceiptService receiptService , IProductService productService)
         {
             _receiptService = receiptService;
+            _productService = productService;
+            ComponentInfo.SetLicense("FREE-LIMITED-KEY");
+          
         }
 
         [HttpGet]
@@ -56,5 +64,30 @@ namespace WMS.Api.Controllers
             return await _receiptService.MarkReceiptAs(receiptId, request);
         }
 
+
+        [HttpPost("generate-receipt")]
+        public FileContentResult CreateReceipt(int id)
+        {
+            var receipt = _receiptService.GetReceipts().Result.FirstOrDefault(x => x.ReceiptId == id);
+
+    
+            var templatePath = Path.Combine("C:\\Users\\Biljana\\Desktop\\Receipt.docx");
+            var document = DocumentModel.Load(templatePath);
+
+            document.Content.Replace("{{SupplierName}}", receipt.SupplierName);
+            document.Content.Replace("{{ProductName}}", receipt.ProductName);
+            document.Content.Replace("{{Amount}}", receipt.Amount.ToString());
+            document.Content.Replace("{{ReceiptDate}}", receipt.ReceiptDate.ToString());
+            document.Content.Replace("{{Quantity}}", receipt.Quantity.ToString());
+            document.Content.Replace("{{ProductPrice}}", receipt.ProductPrice.ToString());
+
+
+
+
+            var stream = new MemoryStream();
+            document.Save(stream, new PdfSaveOptions());
+
+            return File(stream.ToArray(), new PdfSaveOptions().ContentType, "ExportReceipt.pdf");
+        }
     }
 }

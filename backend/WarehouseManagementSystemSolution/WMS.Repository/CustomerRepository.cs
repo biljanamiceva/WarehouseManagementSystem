@@ -45,7 +45,8 @@ namespace WMS.Repository
 
         public async Task<ResponseSingleCustomer> GetCustomerInvoices(int customerId)
         {
-            var customer = await _context.Customers.Include(r => r.Invoices).ThenInclude(r => r.Order).Where(r => r.CustomerId == customerId).FirstOrDefaultAsync();
+            var customer = await _context.Customers.Include(r => r.Invoices)
+                .ThenInclude(r => r.Order).ThenInclude(r => r.OrderProducts).ThenInclude(r=> r.Product).Where(r => r.CustomerId == customerId).FirstOrDefaultAsync();
 
             var response = new ResponseSingleCustomer();
             if (customer == null)
@@ -67,17 +68,39 @@ namespace WMS.Repository
                 PaymentDueDate = invoice.PaymentDueDate,
                 TotalAmount = invoice.TotalAmount,
                 InvoiceStatus = invoice.InvoiceStatus,
-            }).ToList();
+                InvoiceOrderProducts = invoice.Order.OrderProducts.Select(x => new InvoiceOrderProducts
+                {
+                    ProductId = x.ProductId,
+                    ProductName = x.Product?.ProductName,
+                    ProductPrice = x.Product.ProductPrice,
+                    ProductQuantity = x.Quantity
+
+                }).ToList()
+        }).ToList();
+
+          
 
             // Calculate totals
             response.TotalInvoices = customer.Invoices.Count();
             response.AmountSum = customer.Invoices.Sum(r => r.TotalAmount);
 
-            // Calculate Not Paid Receipts count and total sum
-            var notPaidInvoices = customer.Invoices.Where(r => r.InvoiceStatus == InvoiceStatus.NotPaid || r.InvoiceStatus == InvoiceStatus.Cancelled || r.InvoiceStatus == InvoiceStatus.Overdue);
-            response.NotPaidInvoices = notPaidInvoices.Count();
-            response.TotalNotPaidAmountInvoice = notPaidInvoices.Sum(r => r.TotalAmount);
+         
 
+            foreach (var invoice in response.ResponseSingleCustomerInvoices)
+            {
+                int totalAmount = 0;
+                foreach (var product in invoice.InvoiceOrderProducts)
+                {
+                    totalAmount += product.ProductPrice * product.ProductQuantity;
+                }
+                invoice.TotalAmount = totalAmount;
+            }
+
+            var notPaidInvoices = customer.Invoices
+       .Where(r => r.InvoiceStatus == InvoiceStatus.NotPaid || r.InvoiceStatus == InvoiceStatus.Cancelled || r.InvoiceStatus == InvoiceStatus.Overdue);
+
+            response.NotPaidInvoices = notPaidInvoices.Count();
+            response.TotalNotPaidAmountInvoice = notPaidInvoices.Sum(r => r.Order.OrderProducts.Sum(op => op.Product.ProductPrice * op.Quantity));
 
             return response;
         }

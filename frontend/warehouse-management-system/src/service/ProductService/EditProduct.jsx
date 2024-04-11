@@ -14,7 +14,7 @@ const EditProduct = ({ isActive, toggleSidebar }) => {
     productStatus: "", 
   });
   const [loading, setLoading] = useState(true);
-
+  const accessToken = localStorage.getItem("accessToken");
   const productData = {
     ...product,
     productStatus: parseInt(product.productStatus, 12),
@@ -23,7 +23,10 @@ const EditProduct = ({ isActive, toggleSidebar }) => {
   useEffect(() => {
     if (productId) {
       axios
-        .get(`https://localhost:7076/api/Product/${productId}`)
+        .get(`https://localhost:7076/api/Product/${productId}`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
         .then((response) => {
           setProduct(response.data);
           setLoading(false);
@@ -52,6 +55,7 @@ const EditProduct = ({ isActive, toggleSidebar }) => {
       .put(`https://localhost:7076/api/Product/${productId}`, productData, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`
         },
       })
       .then(() => {

@@ -5,18 +5,42 @@ import { ProductStatus } from "../../constants";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-const ProductService = () => {
+const ProductService = ({ searchInput, handleProductsChange }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
+  const [selectedProductName, setSelectedProductName] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
   useEffect(() => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    filterData();
+  }, [searchInput, data]);
+
+  const filterData = () => {
+    const lowerCaseSearch = searchInput.toLowerCase();
+    if (searchInput.trim() === "") {
+      setFilteredData(data);
+    } else {
+      const filtered = data.filter(
+        (product) =>
+          product.productName.toLowerCase().includes(lowerCaseSearch) 
+      );
+      setFilteredData(filtered);
+    }
+  };
+
+
+  const accessToken = localStorage.getItem("accessToken");
   const fetchData = () => {
     axios
-      .get("https://localhost:7076/api/Product")
+      .get("https://localhost:7076/api/Product",
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
       .then((response) => {
         setData(response.data);
         setLoading(false);
@@ -40,32 +64,47 @@ const ProductService = () => {
     }
   };
 
-  const handleDelete = (productId) => {
+  const handleDelete = (productId, productName) => {
+    setSelectedProductName(productName);
     setShowDeleteModal(true);
     setSelectedProductId(productId);
   };
 
   const confirmDelete = () => {
     axios
-      .delete(`https://localhost:7076/api/Product/${selectedProductId}`)
+      .delete(`https://localhost:7076/api/Product/${selectedProductId}`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
       .then(() => {
         setData((prevData) =>
           prevData.filter((product) => product.productId !== selectedProductId)
         );
+        setFilteredData((prevFilteredData) =>
+        prevFilteredData.filter(
+          (product) => product.productId !== selectedProductId
+        )
+      );
 
         setShowDeleteModal(false);
         setSelectedProductId(null);
+        setSelectedProductName("");
       })
       .catch((error) => {
         console.error("Error deleting data:", error);
         setShowDeleteModal(false);
         setSelectedProductId(null);
+        setSelectedProductName("");
       });
   };
+  useEffect(() => {
+    handleProductsChange(data);
+  }, [data]);
 
   const cancelDelete = () => {
     setShowDeleteModal(false);
     setSelectedProductId(null);
+    setSelectedProductName("");
   };
 
   return (
@@ -92,12 +131,12 @@ const ProductService = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((product, index) => (
+              {filteredData.map((product, index) => (
                 <tr key={product.productId}>
                   <td>{index + 1}</td>
                   <td>{product.productName}</td>
                   <td>{product.productQuantityInStock} kg</td>
-                  <td>{product.productPrice}  €</td>
+                  <td>{product.productPrice}  MKD</td>
                   <td>
                     <span
                       className={`status ${
@@ -120,7 +159,7 @@ const ProductService = () => {
                     |
                     <RiDeleteBinLine
                       className="app_actionBtn"
-                      onClick={() => handleDelete(product.productId)}
+                      onClick={() => handleDelete(product.productId, product.productName)}
                     />
                   </td>
                 </tr>
@@ -132,7 +171,7 @@ const ProductService = () => {
       {showDeleteModal && (
         <div className="modal">
           <div className="modal-content">
-            <p>Are you sure you want to delete this product?</p>
+            <p>Are you sure you want to delete <strong>{selectedProductName}</strong>?</p>
             <button onClick={confirmDelete}>Yes</button>
             <button onClick={cancelDelete}>No</button>
           </div>

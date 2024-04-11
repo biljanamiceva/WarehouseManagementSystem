@@ -6,20 +6,46 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const CustomerService = () => {
+const CustomerService = ({ searchInput, handleCustomersChange }) => {
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  const [selectedCustomerName, setSelectedCustomerName] = useState("");
   const navigate = useNavigate();
   
   useEffect(() => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    filterData();
+  }, [searchInput, data]);
+
+  const filterData = () => {
+    const lowerCaseSearch = searchInput.toLowerCase();
+
+    if (searchInput.trim() === "") {
+      setFilteredData(data);
+    } else {
+      const filtered = data.filter(
+        (customer) =>
+        customer.companyName.toLowerCase().includes(lowerCaseSearch) ||
+        customer.customerPhoneNumber.includes(searchInput) ||
+        customer.customerEmail.toLowerCase().includes(lowerCaseSearch) ||
+        customer.customerAddress.toLowerCase().includes(lowerCaseSearch) ||
+        mapCustomerTypeToString(customer.customerType).toLowerCase().includes(lowerCaseSearch)
+      );
+      setFilteredData(filtered);
+    }
+  };
+  const accessToken = localStorage.getItem('accessToken');
   const fetchData = () => {
     axios
-      .get("https://localhost:7076/api/Customer")
+      .get("https://localhost:7076/api/Customer", {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      })
       .then((response) => {
         setData(response.data);
         setLoading(false);
@@ -43,34 +69,48 @@ const CustomerService = () => {
     }
   };
 
-  const handleDelete = (customerId) => {
+  const handleDelete = (customerId, companyName) => {
+    setSelectedCustomerName(companyName); 
     setShowDeleteModal(true);
     setSelectedCustomerId(customerId);
   };
 
   const confirmDelete = () => {
     axios
-      .delete(`https://localhost:7076/api/Customer/${selectedCustomerId}`)
+      .delete(`https://localhost:7076/api/Customer/${selectedCustomerId}`, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      })
       .then(() => {
         setData((prevData) =>
           prevData.filter(
             (customer) => customer.customerId !== selectedCustomerId
           )
         );
+        setFilteredData((prevFilteredData) =>
+        prevFilteredData.filter(
+          (customer) => customer.customerId !== selectedCustomerId
+        )
+      );
 
         setShowDeleteModal(false);
         setSelectedCustomerId(null);
+        setSelectedCustomerName("");
       })
       .catch((error) => {
         console.error("Error deleting data:", error);
         setShowDeleteModal(false);
         setSelectedCustomerId(null);
+        setSelectedCustomerName("");
       });
   };
+  useEffect(() => {
+    handleCustomersChange(data);
+  }, [data]);
 
   const cancelDelete = () => {
     setShowDeleteModal(false);
     setSelectedCustomerId(null);
+    setSelectedCustomerName("");
   };
 
   const navigateToInvoices = (customerId) => {
@@ -92,7 +132,7 @@ const CustomerService = () => {
             <thead>
               <tr>
                 <td>#</td>
-                <td>Company Name</td>
+                <td>Customer Name</td>
                 <td>Phone</td>
                 <td>Email</td>
                 <td>Customer Address</td>
@@ -101,10 +141,10 @@ const CustomerService = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((customer, index) => (
-                  <tr key={customer.customerId} onClick={() => navigateToInvoices(customer.customerId)} style={{cursor: "pointer"}}>
+              {filteredData.map((customer, index) => (
+                  <tr key={customer.customerId}>
                   <td>{index + 1}</td>
-                  <td>{customer.companyName}</td>
+                  <td  onClick={() => navigateToInvoices(customer.customerId)} style={{cursor: "pointer"}}>{customer.companyName}</td>
                   <td>{customer.customerPhoneNumber}</td>
                   <td>{customer.customerEmail}</td>
                   <td>{customer.customerAddress}</td>
@@ -116,7 +156,7 @@ const CustomerService = () => {
                     |
                     <RiDeleteBinLine
                       className="app_actionBtn"
-                      onClick={() => handleDelete(customer.customerId)}
+                      onClick={() => handleDelete(customer.customerId, customer.companyName)}
                     />
                   </td>
                 </tr>
@@ -128,7 +168,7 @@ const CustomerService = () => {
       {showDeleteModal && (
         <div className="modal">
           <div className="modal-content">
-            <p>Are you sure you want to delete this customer?</p>
+            <p>Are you sure you want to delete <strong>{selectedCustomerName}</strong>?</p>
             <button onClick={confirmDelete}>Yes</button>
             <button onClick={cancelDelete}>No</button>
           </div>

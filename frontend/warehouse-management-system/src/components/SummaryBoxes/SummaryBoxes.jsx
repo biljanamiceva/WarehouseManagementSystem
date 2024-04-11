@@ -16,14 +16,15 @@ const SummaryBoxes = ({ boxOne, boxTwo, notPaidAmount,  boxThree, boxFour, title
 
         <div className="card2">
           <div>
-            <div className="numbers">{boxTwo} ({notPaidAmount}  €)</div>
+            {/* <div className="numbers">{boxTwo} ({notPaidAmount}  MKD)</div> */}
+            <div className="numbers">{boxTwo} </div>
             <div className="cardName">Not Paid</div>
           </div>
 
           <div className="iconBx"></div>
         </div>
 
-        <div className="card3">
+        {/* <div className="card3">
           <div>
             <div className="numbers">{boxThree}  kg</div>
             <div className="cardName">Total Quantity</div>
@@ -34,12 +35,12 @@ const SummaryBoxes = ({ boxOne, boxTwo, notPaidAmount,  boxThree, boxFour, title
 
         <div className="card4">
           <div>
-            <div className="numbers">{boxFour}  €</div>
+            <div className="numbers">{boxFour} MKD</div>
             <div className="cardName">Total Amount</div>
           </div>
 
           <div className="iconBx"></div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

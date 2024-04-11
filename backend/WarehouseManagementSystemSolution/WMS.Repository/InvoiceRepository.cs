@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure;
+using Microsoft.EntityFrameworkCore;
 using WMS.DataContext;
 using WMS.Domain.Interfaces.Repository;
 using WMS.Domain.Models;
@@ -42,23 +43,45 @@ namespace WMS.Repository
             return invoice;
         }
 
+        public Task<ResponseSingleInvoiceOrders> GetInvoiceOrders(int invoiceId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<ResponseInvoice>> GetInvoices()
         {
             var resultList = await _context.Invoices
-            .Include(r => r.Customer)
-            .Select(invoice => new ResponseInvoice
+                .Include(r => r.Customer)
+                .Include(r => r.Order).ThenInclude(o => o.OrderProducts).ThenInclude(op => op.Product).ToListAsync();
+            var invoices = resultList.Select(invoice => new ResponseInvoice
             {
                 InvoiceId = invoice.InvoiceId,
                 PaymentDueDate = invoice.PaymentDueDate,
-                TotalAmount = invoice.TotalAmount,
+                //TotalAmount = invoice.TotalAmount,
                 InvoiceStatus = invoice.InvoiceStatus,
                 CustomerId = invoice.CustomerId,
                 CompanyName = invoice.Customer != null ? invoice.Customer.CompanyName : null,
+                InvoiceOrderProductsI = invoice.Order.OrderProducts.Select(prod => new InvoiceOrderProductsI
+                {
+                    ProductId = prod.ProductId,
+                    ProductName = prod.Product.ProductName,
+                    ProductPrice = prod.Product.ProductPrice,
+                    ProductQuantity = prod.Quantity
+                }).ToList()
+            }).ToList();
+            foreach (var invoice in invoices)
+            {
+                int totalAmount = 0;
+                foreach (var product in invoice.InvoiceOrderProductsI)
+                {
+                    totalAmount =totalAmount + (product.ProductPrice * product.ProductQuantity);
+                }
+                invoice.TotalAmount = totalAmount;
+            }
 
-            })
-            .ToListAsync();
-            return resultList;
+            return invoices;
         }
+
 
         public async Task<Invoice> UpdateInvoice(Invoice invoice)
         {
@@ -66,5 +89,6 @@ namespace WMS.Repository
             await _context.SaveChangesAsync();
             return invoice;
         }
+
     }
 }

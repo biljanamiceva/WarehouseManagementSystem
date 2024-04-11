@@ -17,7 +17,7 @@ const AddReceipt = ({ isActive, toggleSidebar }) => {
   const [errors, setErrors] = useState({});
   const [supplier, setSupplier] = useState([]);
   const [product, setProduct] = useState([]);
-
+  const accessToken = localStorage.getItem("accessToken");
   useEffect(() => {
     fetchSuppliers();
     fetchProducts();
@@ -25,7 +25,9 @@ const AddReceipt = ({ isActive, toggleSidebar }) => {
 
   const fetchSuppliers = async () => {
     try {
-      const response = await axios.get("https://localhost:7076/api/Supplier");
+      const response = await axios.get("https://localhost:7076/api/Supplier", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
       setSupplier(response.data);
     } catch (error) {
       console.error("Error fetching suppliers:", error);
@@ -34,7 +36,9 @@ const AddReceipt = ({ isActive, toggleSidebar }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("https://localhost:7076/api/Product");
+      const response = await axios.get("https://localhost:7076/api/Product", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
       setProduct(response.data);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -63,6 +67,7 @@ const AddReceipt = ({ isActive, toggleSidebar }) => {
       .post("https://localhost:7076/api/Receipt", receiptData, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
       })
       .then((response) => {
@@ -143,7 +148,7 @@ const AddReceipt = ({ isActive, toggleSidebar }) => {
                 onChange={handleChange}
               />
             </div>
-            <div className="form-group">
+            {/* <div className="form-group">
               <label>Amount</label>
               <input
                 type="text"
@@ -151,7 +156,7 @@ const AddReceipt = ({ isActive, toggleSidebar }) => {
                 value={receipt.amount}
                 onChange={handleChange}
               />
-            </div>
+            </div> */}
             <div className="form-group">
               <label>Receipt Status</label>
               <select
@@ -162,8 +167,6 @@ const AddReceipt = ({ isActive, toggleSidebar }) => {
                 <option>Select status</option>
                 <option value="1">Paid</option>
                 <option value="2">Not Paid</option>
-                <option value="3">Cancelled</option>
-                <option value="4">Overdue</option>
               </select>
             </div>
 

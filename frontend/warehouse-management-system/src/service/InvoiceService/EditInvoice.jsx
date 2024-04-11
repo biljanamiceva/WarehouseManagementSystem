@@ -15,7 +15,7 @@ const EditInvoice = ({ isActive, toggleSidebar }) => {
   });
   const [loading, setLoading] = useState(true);
   const [customer, setCustomer] = useState([]);
-
+  const accessToken = localStorage.getItem('accessToken');
   const invoiceData = {
     ...invoice,
     invoiceStatus: parseInt(invoice.invoiceStatus, 12),
@@ -27,7 +27,9 @@ const EditInvoice = ({ isActive, toggleSidebar }) => {
 
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get("https://localhost:7076/api/Customer");
+      const response = await axios.get("https://localhost:7076/api/Customer", {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
       setCustomer(response.data);
     } catch (error) {
       console.error("Error fetching customers:", error);
@@ -37,7 +39,9 @@ const EditInvoice = ({ isActive, toggleSidebar }) => {
   useEffect(() => {
     if (invoiceId) {
       axios
-        .get(`https://localhost:7076/api/Invoice/${invoiceId}`)
+        .get(`https://localhost:7076/api/Invoice/${invoiceId}`, {
+          headers: { Authorization: `Bearer ${accessToken}` }
+        })
         .then((response) => {
           setInvoice(response.data);
           setLoading(false);
@@ -66,6 +70,7 @@ const EditInvoice = ({ isActive, toggleSidebar }) => {
       .put(`https://localhost:7076/api/Invoice/${invoiceId}`, invoiceData, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`
         },
       })
       .then(() => {
@@ -144,8 +149,6 @@ const EditInvoice = ({ isActive, toggleSidebar }) => {
                   <option>Select status</option>
                   <option value="1">Paid</option>
                   <option value="2">Not Paid</option>
-                  <option value="3">Cancelled</option>
-                  <option value="4">Overdue</option>
                 </select>
               </div>
 

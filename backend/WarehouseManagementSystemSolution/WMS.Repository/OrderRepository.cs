@@ -33,7 +33,7 @@ namespace WMS.Repository
 
         public async Task<Order> GetOrderById(int orderId)
         {
-            var order = await _context.Orders.SingleOrDefaultAsync(e => e.OrderId == orderId);
+            var order = await _context.Orders.Include(r => r.OrderProducts).ThenInclude(r => r.Product).SingleOrDefaultAsync(e => e.OrderId == orderId);
             if (order == null)
             {
                 throw new ArgumentNullException("Entity is null.");
@@ -48,10 +48,18 @@ namespace WMS.Repository
             .Select(order => new ResponseOrder
             {
                 OrderId = order.OrderId,
+                OrderTitle=order.OrderTitle,
                 TotalAmount = order.TotalAmount,
                 OrderStatus = order.OrderStatus,
                 CustomerId = order.CustomerId,
                 CompanyName = order.Customer != null ? order.Customer.CompanyName : null,
+                OrderDetails = order.OrderProducts.Select(prod => new OrderDetails
+                {
+                    ProductId = prod.ProductId,
+                    ProductName = prod.Product.ProductName,
+                    ProductPrice = prod.Product.ProductPrice,
+                    ProductQuantity = prod.Quantity
+                }).ToList()
             })
             .ToListAsync();
 
@@ -64,7 +72,5 @@ namespace WMS.Repository
             await _context.SaveChangesAsync();
             return order;
         }
-
-
     }
 }

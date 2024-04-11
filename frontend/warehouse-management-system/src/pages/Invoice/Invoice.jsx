@@ -5,31 +5,30 @@ import CardBox from "../../components/CardBox/CardBox";
 import InvoiceService from "../../service/InvoiceService/InvoiceService";
 import axios from "axios";
 
-const Invoice = ({ isActive, toggleSidebar}) => {
+const Invoice = ({ isActive, toggleSidebar }) => {
   const [totalInvoices, setTotalInvoices] = useState(0);
-  const [invoices, setInvoices] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("https://localhost:7076/api/Invoice");
-        setInvoices(response.data);
-        setTotalInvoices(response.data.length);
-      } catch (error) {
-        console.error("Error fetching invoices:", error);
-      }
-    };
+  const handleSearchInputChange = (value) => {
+    setSearchInput(value);
+  };
 
-    fetchData();
-  }, [invoices]);
-  
+  const handleInvoicesChange = (value) => {
+    console.log(value);
+    console.log(value.length);
+    setTotalInvoices(value.length);
+  }
+
   return (
     <div className="container">
       <Sidebar isActive={isActive} />
       <div className={`main ${isActive ? "active" : ""}`}>
-        <Navbar toggleSidebar={toggleSidebar} />
+        <Navbar toggleSidebar={toggleSidebar}    handleSearchInputChange={handleSearchInputChange}/>
         <CardBox total={totalInvoices} title={"Invoices"} />
-        <InvoiceService />
+        <InvoiceService
+        searchInput={searchInput}
+        handleSearchInputChange={handleSearchInputChange}
+        handleInvoicesChange={handleInvoicesChange} />
       </div>
     </div>
   );

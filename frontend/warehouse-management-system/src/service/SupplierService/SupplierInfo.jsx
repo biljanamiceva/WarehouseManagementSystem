@@ -18,10 +18,12 @@ const SupplierInfo = ({ isActive, toggleSidebar }) => {
   useEffect(() => {
     fetchData();
   }, []);
-
+  const accessToken = localStorage.getItem("accessToken");
   const fetchData = () => {
     axios
-      .get(`https://localhost:7076/api/supplier/${supplierId}/receipts`)
+      .get(`https://localhost:7076/api/supplier/${supplierId}/receipts`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
       .then((response) => {
         console.log("Supplier API Response:", response.data);
         setSupplier(response.data);
@@ -40,12 +42,6 @@ const SupplierInfo = ({ isActive, toggleSidebar }) => {
       case 2:
       case "NotPaid":
         return "Not Paid";
-      case 3:
-      case "Cancelled":
-        return "Cancelled";
-      case 4:
-      case "Overdue":
-        return "Overdue";
       default:
         return "Unknown Type";
     }
@@ -62,7 +58,10 @@ const SupplierInfo = ({ isActive, toggleSidebar }) => {
       .put(
         `https://localhost:7076/api/receipt/${selectedReceipt.receiptId}/markAs`,
         {
-          receiptStatus: newStatus, // Use 'receiptStatus' instead of 'newStatus'
+          receiptStatus: newStatus,
+        },
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       )
       .then((response) => {
@@ -87,6 +86,7 @@ const SupplierInfo = ({ isActive, toggleSidebar }) => {
           };
         });
         setShowModal(false);
+        fetchData();
       })
       .catch((error) => {
         console.error("Error changing status:", error);
@@ -142,7 +142,7 @@ const SupplierInfo = ({ isActive, toggleSidebar }) => {
                           )}
                         </td>
                         <td>{receipt.quantity} kg</td>
-                        <td>{receipt.amount} €</td>
+                        <td>{receipt.amount} MKD</td>
                         <td>
                           <span
                             className={`status ${
@@ -151,12 +151,6 @@ const SupplierInfo = ({ isActive, toggleSidebar }) => {
                                 : receipt.receiptStatus ===
                                   ReceiptStatus.NotPaid
                                 ? "not-paid"
-                                : receipt.receiptStatus ===
-                                  ReceiptStatus.Cancelled
-                                ? "cancelled"
-                                : receipt.receiptStatus ===
-                                  ReceiptStatus.Overdue
-                                ? "overdue"
                                 : ""
                             }`}
                           >
@@ -192,15 +186,6 @@ const SupplierInfo = ({ isActive, toggleSidebar }) => {
               <button onClick={() => handleChangeStatus(ReceiptStatus.NotPaid)}>
                 Mark as Not Paid
               </button>
-              <button
-                onClick={() => handleChangeStatus(ReceiptStatus.Cancelled)}
-              >
-                Mark as Cancelled
-              </button>
-              <button onClick={() => handleChangeStatus(ReceiptStatus.Overdue)}>
-                Mark as Overdue
-              </button>
-              <button onClick={() => setShowModal(false)}>Cancel</button>
             </div>
           </div>
         )}

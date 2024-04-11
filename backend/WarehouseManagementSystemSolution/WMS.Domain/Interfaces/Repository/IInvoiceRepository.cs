@@ -14,5 +14,7 @@ namespace WMS.Domain.Interfaces.Repository
         Task<Invoice> UpdateInvoice(Invoice invoice);
 
         Task DeleteInvoice(int invoiceId);
+
+       Task<ResponseSingleInvoiceOrders> GetInvoiceOrders(int invoiceId);
     }
 }

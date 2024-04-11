@@ -11,22 +11,40 @@ const AddInvoice = ({ isActive, toggleSidebar }) => {
     totalAmount: "",
     invoiceStatus: "",
     customerId: "",
+    orderId: "",
+    orderTitle: "",
   });
   const [errors, setErrors] = useState({});
   const [customer, setCustomer] = useState([]);
-
+  const [order, setOrder] = useState([]);
+  const accessToken = localStorage.getItem('accessToken');
   useEffect(() => {
     fetchCustomers();
+    fetchOrders();
   }, []);
 
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get("https://localhost:7076/api/Customer");
+      const response = await axios.get("https://localhost:7076/api/Customer", {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
       setCustomer(response.data);
     } catch (error) {
       console.error("Error fetching customers:", error);
     }
   };
+
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get("https://localhost:7076/api/Order", {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+      setOrder(response.data);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,6 +68,7 @@ const AddInvoice = ({ isActive, toggleSidebar }) => {
       .post("https://localhost:7076/api/Invoice", invoiceData, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`
         },
       })
       .then((response) => {
@@ -81,6 +100,22 @@ const AddInvoice = ({ isActive, toggleSidebar }) => {
             <h2>Add Invoice</h2>
           </div>
           <form className="add-form" onSubmit={handleSubmit}>
+
+          <div className="form-group">
+              <label>Order Title</label>
+              <select
+                name="orderId"
+                value={invoice.orderId}
+                onChange={handleChange}
+              >
+                <option value="">Select an order</option>
+                {order.map((order) => (
+                  <option key={order.orderId} value={order.orderId}>
+                    {order.orderTitle}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className="form-group">
               <label>Payment Due Date </label>
               <input
@@ -90,14 +125,15 @@ const AddInvoice = ({ isActive, toggleSidebar }) => {
                 onChange={handleChange}
               />
             </div>
-            <div className="form-group">
+            {/* <div className="form-group">
               <label>Total Amount</label>
               <input
                 name="totalAmount"
                 value={invoice.totalAmount}
                 onChange={handleChange}
               />
-            </div>
+            </div> */}
+          
             <div className="form-group">
               <label>Company name</label>
               <select
@@ -124,8 +160,6 @@ const AddInvoice = ({ isActive, toggleSidebar }) => {
                 <option>Select status</option>
                 <option value="1">Paid</option>
                 <option value="2">Not Paid</option>
-                <option value="3">Cancelled</option>
-                <option value="4">Overdue</option>
               </select>
             </div>
 

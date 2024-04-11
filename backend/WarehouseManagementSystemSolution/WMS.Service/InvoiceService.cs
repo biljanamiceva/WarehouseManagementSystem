@@ -21,9 +21,9 @@ namespace WMS.Service
             var invoice = new Invoice();
 
             invoice.PaymentDueDate = request.PaymentDueDate;
-            invoice.TotalAmount = request.TotalAmount;
             invoice.InvoiceStatus = request.InvoiceStatus;
             invoice.CustomerId = request.CustomerId;
+            invoice.OrderId = request.OrderId;
 
             return await _invoiceRepository.AddInvoice(invoice);
         }
@@ -66,7 +66,6 @@ namespace WMS.Service
             }
 
             invoice.PaymentDueDate = request.PaymentDueDate;
-            invoice.TotalAmount = request.TotalAmount;
             invoice.InvoiceStatus = request.InvoiceStatus;
             // invoice.CustomerId = request.CustomerId;
 

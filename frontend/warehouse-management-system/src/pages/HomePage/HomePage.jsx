@@ -1,6 +1,7 @@
 import React from "react";
 import "./HomePage.css";
 import { images } from "../../constants";
+import { Link } from "react-router-dom";
 const HomePage = () => {
   return (
     <div className="fullPage">
@@ -45,9 +46,9 @@ const HomePage = () => {
       </div>
       <div className="column" style={{ backgroundColor: "white" }}>
         <div className="homePageBtn">
-        <button className="signInButton">Sign in</button>
+          <Link to="/login" className="signInButton">Sign in</Link>
         </div>
-     
+
         <p className="lastParagraph">
           Orders <br /> Sorted <br /> Delivered
         </p>

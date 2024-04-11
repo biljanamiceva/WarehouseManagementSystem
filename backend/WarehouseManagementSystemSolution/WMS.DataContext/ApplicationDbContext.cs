@@ -19,6 +19,7 @@ namespace WMS.DataContext
 
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderProducts> OrderProducts { get; set; }
+        public DbSet<User> Users { get; set; }
 
 
 

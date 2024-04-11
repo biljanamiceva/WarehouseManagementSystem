@@ -15,11 +15,13 @@ const EditSupplier = ({ isActive, toggleSidebar }) => {
     supplierAccountNumber: "",
   });
   const [loading, setLoading] = useState(true);
-
+  const accessToken = localStorage.getItem('accessToken');
   useEffect(() => {
     if (supplierId) {
       axios
-        .get(`https://localhost:7076/api/Supplier/${supplierId}`)
+        .get(`https://localhost:7076/api/Supplier/${supplierId}`, {
+          headers: { Authorization: `Bearer ${accessToken}` }
+        })
         .then((response) => {
           setSupplier(response.data);
           setLoading(false);
@@ -49,6 +51,7 @@ const EditSupplier = ({ isActive, toggleSidebar }) => {
       .put(`https://localhost:7076/api/Supplier/${supplierId}`, supplier, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`
         },
       })
       .then(() => {

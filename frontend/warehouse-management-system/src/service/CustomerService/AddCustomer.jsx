@@ -66,7 +66,7 @@ const AddCustomer = ({ isActive, toggleSidebar }) => {
     // Return true if there are no validation errors
     return Object.keys(newErrors).length === 0;
   };
-
+  const accessToken = localStorage.getItem('accessToken');
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Submitting...", customer); // Add this line
@@ -75,6 +75,7 @@ const AddCustomer = ({ isActive, toggleSidebar }) => {
         .post("https://localhost:7076/api/Customer", customerData, {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`
           },
         })
         .then((response) => {

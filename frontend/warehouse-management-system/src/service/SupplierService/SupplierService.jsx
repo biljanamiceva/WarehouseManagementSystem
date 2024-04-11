@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { BiSolidEdit } from "react-icons/bi";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const SupplierService = ({ searchInput }) => {
+const SupplierService = ({ searchInput, handleSupliersChange }) => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedSupplierId, setSelectedSupplierId] = useState(null);
+  const [selectedSupplierName, setSelectedSupplierName] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,9 +22,13 @@ const SupplierService = ({ searchInput }) => {
     filterData();
   }, [searchInput, data]);
 
+  const accessToken = localStorage.getItem("accessToken");
+
   const fetchData = () => {
     axios
-      .get("https://localhost:7076/api/supplier")
+      .get("https://localhost:7076/api/supplier", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
       .then((response) => {
         setData(response.data);
         setLoading(false);
@@ -51,14 +56,17 @@ const SupplierService = ({ searchInput }) => {
     }
   };
 
-  const handleDelete = (supplierId) => {
+  const handleDelete = (supplierId, supplierName) => {
+    setSelectedSupplierName(supplierName);
     setShowDeleteModal(true);
     setSelectedSupplierId(supplierId);
   };
 
   const confirmDelete = () => {
     axios
-      .delete(`https://localhost:7076/api/supplier/${selectedSupplierId}`)
+      .delete(`https://localhost:7076/api/supplier/${selectedSupplierId}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
       .then(() => {
         setData((prevData) =>
           prevData.filter(
@@ -72,17 +80,24 @@ const SupplierService = ({ searchInput }) => {
         );
         setShowDeleteModal(false);
         setSelectedSupplierId(null);
+        setSelectedSupplierName("");
       })
       .catch((error) => {
         console.error("Error deleting data:", error);
         setShowDeleteModal(false);
         setSelectedSupplierId(null);
+        setSelectedSupplierName("");
       });
   };
+
+  useEffect(() => {
+    handleSupliersChange(data);
+  }, [data]);
 
   const cancelDelete = () => {
     setShowDeleteModal(false);
     setSelectedSupplierId(null);
+    setSelectedSupplierName("");
   };
 
   const navigateToReceipts = (supplierId) => {
@@ -114,10 +129,11 @@ const SupplierService = ({ searchInput }) => {
             </thead>
             <tbody>
               {filteredData.map((supplier, index) => (
-                 <tr key={supplier.supplierId} onClick={() => navigateToReceipts(supplier.supplierId)} style={{cursor: "pointer"}}>
-                
+                <tr key={supplier.supplierId} style={{ cursor: "pointer" }}>
                   <td>{index + 1}</td>
-                  <td>{supplier.supplierFullName}</td>
+                  <td onClick={() => navigateToReceipts(supplier.supplierId)}>
+                    {supplier.supplierFullName}
+                  </td>
                   <td>{supplier.supplierPhoneNumber}</td>
                   <td>{supplier.supplierEmail}</td>
                   <td>{supplier.supplierAccountNumber}</td>
@@ -128,7 +144,12 @@ const SupplierService = ({ searchInput }) => {
                     |
                     <RiDeleteBinLine
                       className="app_actionBtn"
-                      onClick={() => handleDelete(supplier.supplierId)}
+                      onClick={() =>
+                        handleDelete(
+                          supplier.supplierId,
+                          supplier.supplierFullName
+                        )
+                      }
                     />
                   </td>
                 </tr>
@@ -141,7 +162,10 @@ const SupplierService = ({ searchInput }) => {
       {showDeleteModal && (
         <div className="modal">
           <div className="modal-content">
-            <p>Are you sure you want to delete this supplier?</p>
+            <p>
+              Are you sure you want to delete{" "}
+              <strong>{selectedSupplierName}</strong>?
+            </p>
             <button onClick={confirmDelete}>Yes</button>
             <button onClick={cancelDelete}>No</button>
           </div>

@@ -18,7 +18,7 @@ const EditReciept = ({ isActive, toggleSidebar }) => {
   const [loading, setLoading] = useState(true);
   const [supplier, setSupplier] = useState([]);
   const [product, setProduct] = useState([]);
-
+  const accessToken = localStorage.getItem("accessToken");
   const receiptData = {
     ...receipt,
     receiptStatus: parseInt(receipt.receiptStatus, 12),
@@ -31,7 +31,10 @@ const EditReciept = ({ isActive, toggleSidebar }) => {
 
   const fetchSuppliers = async () => {
     try {
-      const response = await axios.get("https://localhost:7076/api/Supplier");
+      const response = await axios.get("https://localhost:7076/api/Supplier",
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
       setSupplier(response.data);
     } catch (error) {
       console.error("Error fetching suppliers:", error);
@@ -40,7 +43,10 @@ const EditReciept = ({ isActive, toggleSidebar }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("https://localhost:7076/api/Product");
+      const response = await axios.get("https://localhost:7076/api/Product",
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
       setProduct(response.data);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -50,7 +56,10 @@ const EditReciept = ({ isActive, toggleSidebar }) => {
   useEffect(() => {
     if (receiptId) {
       axios
-        .get(`https://localhost:7076/api/Receipt/${receiptId}`)
+        .get(`https://localhost:7076/api/Receipt/${receiptId}`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
         .then((response) => {
           setReceipt(response.data);
           setLoading(false);
@@ -79,6 +88,7 @@ const EditReciept = ({ isActive, toggleSidebar }) => {
       .put(`https://localhost:7076/api/Receipt/${receiptId}`, receiptData, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`
         },
       })
       .then(() => {
@@ -181,8 +191,6 @@ const EditReciept = ({ isActive, toggleSidebar }) => {
                 <option>Select status</option>
                 <option value="1">Paid</option>
                 <option value="2">Not Paid</option>
-                <option value="3">Cancelled</option>
-                <option value="4">Overdue</option>
               </select>
             </div>
             <div className="addActions">

@@ -13,7 +13,7 @@ const AddProduct = ({ isActive, toggleSidebar }) => {
     productStatus: "", // Number instead of string
   });
   const [errors, setErrors] = useState({});
-
+  const accessToken = localStorage.getItem("accessToken");
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProduct({
@@ -67,6 +67,7 @@ const AddProduct = ({ isActive, toggleSidebar }) => {
         .post("https://localhost:7076/api/Product", productData, {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`
           },
         })
         .then((response) => {

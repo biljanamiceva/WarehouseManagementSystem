@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WMS.Domain.Interfaces.Service;
 using WMS.Domain.Models;
@@ -10,6 +11,7 @@ namespace WMS.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
@@ -46,6 +48,12 @@ namespace WMS.Api.Controllers
         public async Task<Order> GetOrderById(int orderId)
         {
             return await _orderService.GetOrderById(orderId);
+        }
+
+        [HttpPut("{orderId}/markAs")]
+        public async Task<Order> MarkOrderAs(int orderId, RequestMarkOrderAs request)
+        {
+            return await _orderService.MarkReceiptAs(orderId, request);
         }
     }
 }

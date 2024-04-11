@@ -3,32 +3,29 @@ import Sidebar from "../../components/Slidebar/Sidebar";
 import Navbar from "../../components/Navbar/Navbar";
 import CardBox from "../../components/CardBox/CardBox";
 import OrderService from "../../service/OrderService/OrderService";
-import axios from "axios";
 
 const Order = ({ isActive, toggleSidebar, title }) => {
   const [totalOrders, setTotalOrders] = useState(0);
-  const [orders, setOrders] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("https://localhost:7076/api/Order");
-        setOrders(response.data);
-        setTotalOrders(response.data.length);
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-      }
-    };
+  const handleSearchInputChange = (value) => {
+    setSearchInput(value);
+  };
+  const handleOrdersChange = (value) => {
+    console.log(value);
+    console.log(value.length);
+    setTotalOrders(value.length);
+  }
 
-    fetchData();
-  }, [orders]);
-  return(
+  return (
     <div className="container">
       <Sidebar isActive={isActive} />
       <div className={`main ${isActive ? "active" : ""}`}>
-        <Navbar toggleSidebar={toggleSidebar} />
+        <Navbar toggleSidebar={toggleSidebar}  handleSearchInputChange={handleSearchInputChange}/>
         <CardBox total={totalOrders} title={"Orders"} />
-        <OrderService />
+        <OrderService  searchInput={searchInput}
+          handleSearchInputChange={handleSearchInputChange}
+          handleOrdersChange={handleOrdersChange}/>
       </div>
     </div>
   );

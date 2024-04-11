@@ -58,7 +58,7 @@ const AddSupplier = ({ isActive, toggleSidebar }) => {
     // Return true if there are no validation errors
     return Object.keys(newErrors).length === 0;
   };
-
+  const accessToken = localStorage.getItem('accessToken');
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -67,6 +67,7 @@ const AddSupplier = ({ isActive, toggleSidebar }) => {
         .post("https://localhost:7076/api/Supplier", supplier, {
           headers: {
             "Content-Type": "application/json",
+             Authorization: `Bearer ${accessToken}` 
           },
         })
         .then((response) => {

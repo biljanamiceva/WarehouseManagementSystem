@@ -19,5 +19,7 @@ namespace WMS.Domain.Interfaces.Service
 
         // Delete a order
         Task DeleteOrder(int orderId);
+
+        Task<Order> MarkReceiptAs(int orderId, RequestMarkOrderAs request);
     }
 }

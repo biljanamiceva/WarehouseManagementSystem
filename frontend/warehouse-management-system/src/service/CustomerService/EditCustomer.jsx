@@ -20,11 +20,13 @@ const EditCustomer = ({ isActive, toggleSidebar }) => {
     ...customer,
     customerType: parseInt(customer.customerType, 12),
   };
-
+  const accessToken = localStorage.getItem('accessToken');
   useEffect(() => {
     if (customerId) {
       axios
-        .get(`https://localhost:7076/api/Customer/${customerId}`)
+        .get(`https://localhost:7076/api/Customer/${customerId}`, {
+          headers: { Authorization: `Bearer ${accessToken}` }
+        })
         .then((response) => {
           setCustomer(response.data);
           setLoading(false);
@@ -53,6 +55,7 @@ const EditCustomer = ({ isActive, toggleSidebar }) => {
       .put(`https://localhost:7076/api/Customer/${customerId}`, customerData, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`
         },
       })
       .then(() => {

@@ -59,7 +59,8 @@ namespace WMS.Repository
                  SupplierId = receipt.SupplierId,
                  SupplierName = receipt.Supplier != null ? receipt.Supplier.SupplierFullName : null,
                  ProductId = receipt.ProductId,
-                 ProductName = receipt.Product != null ? receipt.Product.ProductName : null
+                 ProductName = receipt.Product != null ? receipt.Product.ProductName : null,
+                 ProductPrice = receipt.Product.ProductPrice
              })
              .ToListAsync();
 

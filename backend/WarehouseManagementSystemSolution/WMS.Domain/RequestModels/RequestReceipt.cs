@@ -10,7 +10,7 @@ namespace WMS.Domain.RequestModels
         [Required]
         public int Quantity { get; set; }
         [Required]
-        public decimal Amount { get; set; }
+       // public int Amount { get; set; }
         public int SupplierId { get; set; }
         public int ProductId { get; set; } 
         [Required]
