@@ -437,5 +437,14 @@ select option {
   color: var(--blue);
 }
  */
+ .payBtn{
+  background-color: var(--white);
+  color: var(--blue);
+  border: 1px solid var(--blue);
+  border-radius: 4px;
+  padding: 2px;
+  margin-left: 10px;
+}
+ 
 
 

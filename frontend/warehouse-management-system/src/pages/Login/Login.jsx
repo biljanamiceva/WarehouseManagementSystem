@@ -3,12 +3,12 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "./loginStyles.css";
 import { images } from "../../constants";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa"; // Import the eye icons
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // State to toggle show/hide password
-  const [loginError, setLoginError] = useState(""); // State for login error message
+  const [showPassword, setShowPassword] = useState(false); 
+  const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {

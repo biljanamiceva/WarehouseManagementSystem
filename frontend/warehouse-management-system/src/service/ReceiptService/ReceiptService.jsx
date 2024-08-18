@@ -2,9 +2,17 @@ import React, { useState, useEffect } from "react";
 import { ReceiptStatus } from "../../constants";
 import { Link } from "react-router-dom";
 import { BiSolidEdit } from "react-icons/bi";
-import { RiDeleteBinLine, RiDownload2Line, RiDownloadCloud2Line } from "react-icons/ri";
+import {
+  RiDeleteBinLine,
+  RiDownload2Line,
+  RiDownloadCloud2Line,
+} from "react-icons/ri";
 import axios from "axios";
-
+import { loadStripe } from "@stripe/stripe-js";
+import Payment from "./Payment";
+const stripePromise = loadStripe(
+  "pk_test_51P4UHaK3FUrzM0bh0DTq0DSsXh93c6hyuwn8ENv9bsBUXpmFx6HZQiFbq3HLC3teLDaM0vJn940AnPLWBT5TwiRU00PSPF5OI3"
+);
 const ReceiptService = ({ searchInput, handleReceiptsChange }) => {
   const [receipts, setReceipts] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -12,19 +20,21 @@ const ReceiptService = ({ searchInput, handleReceiptsChange }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedReceiptId, setSelectedReceiptId] = useState(null);
   const [selectedSupplierName, setSelectedSupplierName] = useState("");
-  const [selectedDate, setSelectedDate] = useState(null); 
+  const [selectedDate, setSelectedDate] = useState(null);
 
   useEffect(() => {
     fetchReceipts();
-  }, []);
+  }, [receipts]);
 
   useEffect(() => {
     filterData();
-  }, [searchInput, receipts, selectedDate]); 
+  }, [searchInput, receipts, selectedDate]);
 
   useEffect(() => {
     handleReceiptsChange(receipts);
   }, [receipts]);
+
+  
 
   const filterData = () => {
     const lowerCaseSearch = searchInput.toLowerCase();
@@ -33,7 +43,9 @@ const ReceiptService = ({ searchInput, handleReceiptsChange }) => {
       let filtered = receipts;
       if (selectedDate) {
         filtered = filtered.filter((receipt) => {
-          const receiptDate = new Date(receipt.receiptDate).toLocaleDateString("en-GB");
+          const receiptDate = new Date(receipt.receiptDate).toLocaleDateString(
+            "en-GB"
+          );
           return receiptDate === selectedDate.toLocaleDateString("en-GB");
         });
       }
@@ -42,7 +54,9 @@ const ReceiptService = ({ searchInput, handleReceiptsChange }) => {
       const filtered = receipts.filter(
         (receipt) =>
           receipt.supplierName.toLowerCase().includes(lowerCaseSearch) ||
-          mapReceiptStatusToString(receipt.receiptStatus).toLowerCase().includes(lowerCaseSearch)
+          mapReceiptStatusToString(receipt.receiptStatus)
+            .toLowerCase()
+            .includes(lowerCaseSearch)
       );
       setFilteredData(filtered);
     }
@@ -55,7 +69,6 @@ const ReceiptService = ({ searchInput, handleReceiptsChange }) => {
   const accessToken = localStorage.getItem("accessToken");
   const fetchReceipts = async () => {
     try {
-    
       const response = await axios.get("https://localhost:7076/api/Receipt", {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
@@ -117,10 +130,14 @@ const ReceiptService = ({ searchInput, handleReceiptsChange }) => {
 
   const generateReceipt = (id) => {
     axios
-      .post(`https://localhost:7076/api/receipt/generate-receipt?id=${id}`, null, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-        responseType: "blob",
-      })
+      .post(
+        `https://localhost:7076/api/receipt/generate-receipt?id=${id}`,
+        null,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+          responseType: "blob",
+        }
+      )
       .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
@@ -167,6 +184,7 @@ const ReceiptService = ({ searchInput, handleReceiptsChange }) => {
                 <td>Amount</td>
                 <td>Status</td>
                 <td>Actions</td>
+                <td>Payment</td>
               </tr>
             </thead>
             <tbody>
@@ -194,17 +212,33 @@ const ReceiptService = ({ searchInput, handleReceiptsChange }) => {
                       {mapReceiptStatusToString(receipt.receiptStatus)}
                     </span>
                   </td>
-                  <td>
+                  <td style={{ display: "flex", justifyContent: "start" }}>
                     <Link to={`/editReceipt/${receipt.receiptId}`}>
                       <BiSolidEdit className="app_actionBtn" />
                     </Link>
                     |
                     <RiDeleteBinLine
                       className="app_actionBtn"
-                      onClick={() => handleDelete(receipt.receiptId, receipt.supplierName)}
-                    /> |
-                    <RiDownloadCloud2Line  className="app_actionBtn" onClick={() => generateReceipt(receipt.receiptId)} />
+                      onClick={() =>
+                        handleDelete(receipt.receiptId, receipt.supplierName)
+                      }
+                    />
+                    |
+                    <RiDownloadCloud2Line
+                      className="app_actionBtn"
+                      onClick={() => generateReceipt(receipt.receiptId)}
+                    />
+                   
                   </td>
+                  <td> {receipt.receiptStatus === ReceiptStatus.NotPaid && (
+                      <Payment
+                        amount={receipt.amount}
+                        supplierName={receipt.supplierName}
+                        currency="MKD"
+                        receiptId={receipt.receiptId}
+                        selectedReceiptId={selectedReceiptId}
+                      />
+                    )}</td>
                 </tr>
               ))}
             </tbody>
@@ -214,7 +248,10 @@ const ReceiptService = ({ searchInput, handleReceiptsChange }) => {
       {showDeleteModal && (
         <div className="modal">
           <div className="modal-content">
-            <p>Are you sure you want to delete receipt for <strong>{selectedSupplierName}</strong>?</p>
+            <p>
+              Are you sure you want to delete receipt for{" "}
+              <strong>{selectedSupplierName}</strong>?
+            </p>
             <button onClick={confirmDelete}>Yes</button>
             <button onClick={cancelDelete}>No</button>
           </div>

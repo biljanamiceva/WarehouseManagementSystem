@@ -1,31 +1,31 @@
-﻿using GemBox.Document.Tables;
-using GemBox.Document;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using GemBox.Document;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
 using WMS.Domain.Enums;
 using WMS.Domain.Interfaces.Service;
 using WMS.Domain.Models;
 using WMS.Domain.RequestModels;
 using WMS.Domain.ResponseModels;
-using WMS.Service;
+using CustomerService = Stripe.CustomerService;
 
 namespace WMS.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    // [Authorize]
     public class ReceiptController : ControllerBase
     {
         private readonly IReceiptService _receiptService;
         private readonly IProductService _productService;
+  
 
-        public ReceiptController(IReceiptService receiptService , IProductService productService)
+        public ReceiptController(IReceiptService receiptService, IProductService productService)
         {
             _receiptService = receiptService;
             _productService = productService;
+           
             ComponentInfo.SetLicense("FREE-LIMITED-KEY");
-          
+
         }
 
         [HttpGet]
@@ -54,7 +54,7 @@ namespace WMS.Api.Controllers
 
         [HttpGet("{receiptId}")]
         public async Task<Receipt> GetReceiptById(int receiptId)
-        {   
+        {
             return await _receiptService.GetReceiptById(receiptId);
         }
 
@@ -70,7 +70,7 @@ namespace WMS.Api.Controllers
         {
             var receipt = _receiptService.GetReceipts().Result.FirstOrDefault(x => x.ReceiptId == id);
 
-    
+
             var templatePath = Path.Combine("C:\\Users\\Biljana\\Desktop\\Receipt.docx");
             var document = DocumentModel.Load(templatePath);
 
@@ -81,13 +81,35 @@ namespace WMS.Api.Controllers
             document.Content.Replace("{{Quantity}}", receipt.Quantity.ToString());
             document.Content.Replace("{{ProductPrice}}", receipt.ProductPrice.ToString());
 
-
-
-
             var stream = new MemoryStream();
             document.Save(stream, new PdfSaveOptions());
 
             return File(stream.ToArray(), new PdfSaveOptions().ContentType, "ExportReceipt.pdf");
         }
+
+
+        [HttpPut("{receiptId}/create-payment")]
+        public async Task<IActionResult> PayReceipt(int receiptId)
+        {
+            var receipt = await _receiptService.GetReceiptById(receiptId);
+
+            if (receipt == null)
+            {
+                return NotFound(new { message = "Receipt not found" });
+            }
+
+          
+
+           
+                receipt.ReceiptStatus = ReceiptStatus.Paid;
+                await _receiptService.MarkReceiptAs(receiptId, new RequestMarkReceiptAs { ReceiptStatus = ReceiptStatus.Paid});
+
+              
+            
+            return Ok(new { message = "Payment successful" });
+
+        }
+
     }
 }
+

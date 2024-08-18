@@ -98,7 +98,7 @@ const OrderDash = () => {
 ) : orders.filter(order => order.orderStatus === OrderStatus.Processing).length === 0 ? (
   // Render image when there are no orders in the Processing status
   <div>
-     <h4>No orders to process, everything shipped</h4>
+     <h4>No orders to process, everything is shipped</h4>
   </div>
      
 ) : (

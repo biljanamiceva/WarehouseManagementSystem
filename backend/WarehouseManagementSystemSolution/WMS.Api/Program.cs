@@ -1,18 +1,31 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Stripe;
 using System.Text.Json.Serialization;
 using WMS.Api.Middleware;
 using WMS.DataContext;
 using WMS.Domain.Interfaces.Repository;
 using WMS.Domain.Interfaces.Service;
+using WMS.Domain.Models;
 using WMS.Repository;
 using WMS.Service;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+// Add Stripe configuration
+builder.Services.Configure<StripeOptions>(builder.Configuration.GetSection("Stripe"));
+
+// Retrieve Stripe options
+var stripeOptions = builder.Configuration.GetSection("Stripe").Get<StripeOptions>();
+
+// Set Stripe API key
+StripeConfiguration.ApiKey = stripeOptions.SecretKey;
 
 builder.Services.AddSwaggerGen(opt =>
 {
@@ -58,16 +71,16 @@ builder.Services.AddTransient<IOrderProductRepository, OrderProductRepository>()
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IDashboardRepository, DashboardRepository>();
 // Services .AddScoped
-builder.Services.AddScoped<ISupplierService, SupplierService>();
-builder.Services.AddScoped<ICustomerService, CustomerService>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IReceiptService, ReceiptService>();
-builder.Services.AddScoped<IInvoiceService, InvoiceService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IPasswordService, PasswordService>();
-builder.Services.AddScoped<IJwtService, JwtService>();
-builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<ISupplierService, WMS.Service.SupplierService>();
+builder.Services.AddScoped<ICustomerService, WMS.Service.CustomerService>();
+builder.Services.AddScoped<IProductService, WMS.Service.ProductService>();
+builder.Services.AddScoped<IReceiptService, WMS.Service.ReceiptService>();
+builder.Services.AddScoped<IInvoiceService, WMS.Service.InvoiceService>();
+builder.Services.AddScoped<IOrderService, WMS.Service.OrderService>();
+builder.Services.AddScoped<IUserService, WMS.Service.UserService>();
+builder.Services.AddScoped<IPasswordService, WMS.Service.PasswordService>();
+builder.Services.AddScoped<IJwtService, WMS.Service.JwtService>();
+builder.Services.AddScoped<IDashboardService, WMS.Service.DashboardService>();
 
 
 var app = builder.Build();

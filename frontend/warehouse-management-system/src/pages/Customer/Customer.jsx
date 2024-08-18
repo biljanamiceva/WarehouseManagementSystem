@@ -17,7 +17,7 @@ const Customer = ({ isActive, toggleSidebar, title }) => {
   const [activeLink, setActiveLink] = useState("customer");
 
   useEffect(() => {
-    setActiveLink("customer"); // Set active link when the component mounts
+    setActiveLink("customer");
   }, []);
   
   const handleCustomersChange = (value) => {
